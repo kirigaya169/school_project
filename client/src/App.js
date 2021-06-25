@@ -4,6 +4,7 @@ import {BrowserRouter as Router, Switch, Route, Link, Redirect} from "react-rout
 import React from 'react'
 import StoreContext from './context.js'
 import {observer} from 'mobx-react';  
+import  LoginForm from './components/loginForm.js';
 
 export const App = observer( 
 class App extends React.Component {
@@ -18,6 +19,9 @@ class App extends React.Component {
       <Switch>
           <Route path='/user/registration'>
             {this.context.userStore.isAuth ? <Redirect to='/' /> : <RegistrationForm />}
+          </Route>
+          <Route path='/user/login'>
+          {this.context.userStore.isAuth ? <Redirect to='/' /> : <LoginForm />}
           </Route>
         </Switch>
       </Router>

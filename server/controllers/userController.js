@@ -1,12 +1,23 @@
 const express = require('express');
 const  bcrypt = require('bcryptjs');
-const {User} = require('../models/models.js');
+const User = require('../models/user.js');
+const Role = require('../models/role.js');
 const jwt = require('jsonwebtoken');
+const {validationResult} = require('express-validator');
 
 const ApiError = require('../error.js');
 
-function generateJWT(id, name, login, email, role, vk_ref){
-    return jwt.sign({id, email, name, login, role, vk_ref}, 
+function generateJWT(user){
+    const payload = {
+        id: user._id,
+        name: user.name,
+        username: user.username, 
+        email: user.email,
+        roles: user.roles,
+        vk_ref: user.vk_ref,
+        class: user.class,
+    }
+    return jwt.sign(payload, 
         process.env.TOKEN_KEY, {
             expiresIn: '24h'
         })
@@ -14,27 +25,56 @@ function generateJWT(id, name, login, email, role, vk_ref){
 
 class UserController{
     async registration(req, res, next){
-        var {name, login, email, password, vk_ref} = req.body;
-        if (!password){
-            return next(ApiError.badRequest("Неправильный пароль"));
+        var errors = validationResult(req);
+        console.log(errors.errors);
+        if (!errors.isEmpty()){
+            return next(ApiError.badRequest(errors.errors[0].msg));
         }
-        var hashPassword = await bcrypt.hash(password, 5);
-        var candidate_name = await User.findOne({where: {login: login}});
-        var candidate_email = await User.findOne({where: {email: email}});
-        if (candidate_name){
-            return next(ApiError.badRequest("Пользователь с таким именем уже существует!"));
+        var {name, email, username, password, _class, vk_ref} = req.body;
+        const candidateByName = await User.findOne({username: username});
+        const candidateByEmail = await User.findOne({email: email});
+        if (candidateByName){
+            return next(ApiError.badRequest("Пользователь с таким именем существует"));
         }
-        if (candidate_email){
-            return next(ApiError.badRequest("Пользователь с таким email уже существует!"));
+        if (candidateByEmail){
+            return next(ApiError.badRequest("Пользователь с таким email существует"));
         }
-        var user = await User.create({login: login, name: name, password: hashPassword, vk_ref: vk_ref, email: email});
-        var token = generateJWT(user.id, user.name, user.login, user.email, user.role, user.vk_ref);
-        console.log(token);
-        res.json({token: token});
+        const userRole = await Role.findOne({value: "USER"});
+        console.log(userRole);
+        var hashPassword = bcrypt.hashSync(password, 7);
+        const user = new User({
+            password: hashPassword,
+            name, username, class: _class, vk_ref, roles: [userRole.value],
+        });
+        await user.save();
+        var token = generateJWT(user);
+        res.json({token});
     }
 
     async login(req, res, next){
+        const {username, password} = req.body;
+        const user = await User.findOne({username: username});
+        if (!user){
+            return next(ApiError.badRequest("Пользователя с таким именем не существует!"));
+        }
+        const validPassword = bcrypt.compareSync(password, user.password);
+        if (!validPassword){
+            return next(ApiError.badRequest("Неправильный пароль!"));
+        }
+        const token = generateJWT(user);
+        res.json({token: token});
+    }
 
+    getUserData(req, res, next){
+        var userMap = {};
+        User.find({}, function(err, users){
+            users.forEach(function(user){
+                userMap[user._id] = user;
+            });
+            return res.json(userMap);
+        })
+        
+        
     }
 }
 

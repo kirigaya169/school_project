@@ -21,7 +21,7 @@ const RegistrationForm = observer(
                 email: '',
                 password: '',
                 vk_ref: '',
-                login: '',
+                username: '',
                 error_text: '',
                 succees_text: '',
             }
@@ -49,7 +49,7 @@ const RegistrationForm = observer(
             event.preventDefault();
             console.log(this.state);
             console.log(process.env.REACT_API_SERVER_HOST);
-            axios.post('http://127.0.0.1:8000/'+ "api/user/registration", this.state).then((response) => {
+            axios.post('http://127.0.0.1:9000/'+ "api/user/registration", this.state).then((response) => {
                 this.successSend(response);
                 
             }).catch((error) => {
@@ -87,7 +87,7 @@ const RegistrationForm = observer(
                 </Snackbar>
                 <div>
                     <TextField style={this.style} name="name" id="name" label="Name" value={this.state.name} onChange={this.handleInput} />
-                    <TextField style={this.style} name="login" id="login" label="Login" value={this.state.login} onChange={this.handleInput} />
+                    <TextField style={this.style} name="username" id="login" label="Login" value={this.state.username} onChange={this.handleInput} />
                     <TextField style={this.style} name="email" id="email" label="Email" value={this.state.email} onChange={this.handleInput} />
                 </div>
                 <div>

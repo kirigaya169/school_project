@@ -1,14 +1,14 @@
 require('dotenv').config();
 
 const express = require('express')
-const sequelize = require('./db.js');
 const chalk = require('chalk');
-const bodyParser = require('body-parser');
+//const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
+const mongoose = require('mongoose');
 const fileUpload = require('express-fileupload');
 
-const models = require('./models/models.js');
+const Role = require('./models/role.js');
 const router = require('./routes/index.js');
 const errorMiddleware = require('./middleware/errorMiddleware.js');
 
@@ -24,9 +24,12 @@ app.use(errorMiddleware);
 
 start = async() => {
     try{
-        await sequelize.authenticate();
-        await sequelize.sync();
-        app.listen(process.env.SERVER_PORT || 8000);
+        await mongoose.connect('mongodb+srv://kirigaya169:mXzuNyx9369LpeP@cluster0.zfvzb.mongodb.net/school_project?retryWrites=true&w=majority', {
+            useNewUrlParser: true,
+        });
+        var port = process.env.SERVER_PORT || 8000;
+        app.listen(port);
+        console.log(`Server works on the port ${port}...`);
     } catch(e){
         console.log(chalk.red(e));
     }
