@@ -7,7 +7,8 @@ const User = new Schema({
     class: {type: Number},
     vk_ref: {type: String},
     email: {type: String},
-    roles: [{type: String, ref: 'Role'}]
+    roles: [{type: String, ref: 'Role'}],
+    subjects: [{type: String, ref: 'Subject'}],
 })
 
 module.exports = model('User', User);

@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const {validationResult} = require('express-validator');
 
 const ApiError = require('../error.js');
+const Subject = require('../models/subject.js');
 
 function generateJWT(user){
     const payload = {
@@ -30,7 +31,9 @@ class UserController{
         if (!errors.isEmpty()){
             return next(ApiError.badRequest(errors.errors[0].msg));
         }
-        var {name, email, username, password, _class, vk_ref} = req.body;
+        var {name, email, username, password, _class, vk_ref, roles, subjects} = req.body;
+        console.log(req.body);
+        console.log(roles);
         const candidateByName = await User.findOne({username: username});
         const candidateByEmail = await User.findOne({email: email});
         if (candidateByName){
@@ -39,12 +42,18 @@ class UserController{
         if (candidateByEmail){
             return next(ApiError.badRequest("Пользователь с таким email существует"));
         }
-        const userRole = await Role.findOne({value: "USER"});
-        console.log(userRole);
+        var subjectsBD = [];
+        for (var i = 0; i < subjects.length; i++){
+            var subject = await Subject.findOne({value: subjects[i]});
+            if (!subject){
+                return next(ApiError.badRequest("Неправильный предмет"));
+            }
+            subjectsBD.push(subject.value);
+        }
         var hashPassword = bcrypt.hashSync(password, 7);
         const user = new User({
             password: hashPassword,
-            name, username, class: _class, vk_ref, roles: [userRole.value],
+            name, username, class: _class, vk_ref, roles: [roles], subjects: subjectsBD,
         });
         await user.save();
         var token = generateJWT(user);

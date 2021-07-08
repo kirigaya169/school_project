@@ -1,5 +1,5 @@
 import React from 'react'
-import {TextField, Button, Snackbar} from '@material-ui/core'
+import {TextField, Button, Snackbar, MenuItem, FormControl, Select, InputLabel, Input, Chip} from '@material-ui/core'
 import MuiAlert from '@material-ui/lab/Alert'
 import axios from 'axios'
 import {observer} from 'mobx-react'
@@ -12,9 +12,20 @@ function Alert(props) {
 const RegistrationForm = observer(
     class RegistrationForm extends React.Component{
 
+        static MIN_CLASS = 5;
+        static MAX_CLASS = 11;
+
         constructor(props, context){
             super(props, context);
-            console.log(this.context);
+            //console.log(this.context);
+            this.subjects = [];
+            this.handleInput = this.handleInput.bind(this);
+            this.handleSubmit = this.handleSubmit.bind(this);
+            //this.hadnleMenu = this.handleMenu.bind(this);
+            this.successSend = this.successSend.bind(this);
+            this.sendSubjects = this.sendSubjects.bind(this);
+            this.handleSubject = this.handleSubject.bind(this);
+            this.handleClass = this.handleClass.bind(this);
             
             this.state = {
                 name: '',
@@ -22,39 +33,64 @@ const RegistrationForm = observer(
                 password: '',
                 vk_ref: '',
                 username: '',
+                roles: '',
+                subjects: [],
+                all_subjects: [],
                 error_text: '',
                 succees_text: '',
+                _class: 5,
             }
-            this.handleInput = this.handleInput.bind(this);
-            this.handleSubmit = this.handleSubmit.bind(this);
-            this.successSend = this.successSend.bind(this)
+            
+            this.classes = [5, 6, 7, 8, 9, 10];
+            axios.get(process.env.REACT_APP_SERVER_HOST + 'api/subjects').then((response) =>{
+                this.sendSubjects(response);
+            });
             this.style = {
                 margin: '10px',
+            }
+            this.formStyle = {
+                margin:'10px',
+                minWidth: 120,
             }
             this.errorMessage = '';
             this.successMessage = '';
         }
 
+        sendSubjects(response){
+            //console.log('data', response.data);
+            this.subjects = response.data.subjects;
+            var subj = [];
+            for (var i = 0; i < this.subjects.length; i++){
+                subj.push(this.subjects[i].value);
+            }
+            this.setState({all_subjects: subj});
+            //console.log("subjects", this.subjects);
+        }
+
         successSend(response){
-            console.log("handle", this.context);
-            console.log(response.data);
+            //onsole.log("handle", this.context);
+            //console.log(response.data);
             this.context.userStore.setUser(response.data.token);
             this.context.userStore.setIsAuth(true);
-            console.log("success", this.context);
+            //console.log("success", this.context);
             this.setState({succees_text: "Запись успешно создана"});
         }
 
+        handleClass(event){
+            this.setState({_class: event.target.value});
+        }
+
         handleSubmit(event){
-            console.log("submit", this.context);
+            //console.log("submit", this.context);
             event.preventDefault();
-            console.log(this.state);
-            console.log(process.env.REACT_API_SERVER_HOST);
-            axios.post('http://127.0.0.1:9000/'+ "api/user/registration", this.state).then((response) => {
+            //console.log(this.state);
+            //console.log("process", process.env.REACT_APP_SERVER_HOST);
+            axios.post(process.env.REACT_APP_SERVER_HOST + "api/user/registration", this.state).then((response) => {
                 this.successSend(response);
                 
             }).catch((error) => {
-                console.log("error", error);
-                console.log(error.response.data);
+                //console.log("error", error);
+                //console.log(error.response.data);
                 this.setState({error_text: error.response.data});
                 this.errorMessage = error.response.data;
             })
@@ -70,8 +106,31 @@ const RegistrationForm = observer(
             })
         }
 
+        handleMenu(event){
+            console.log(this);
+            this.setState({roles: event.target.value});
+            //console.log("menu", this.state.roles[0]);
+        }
+
+        handleSubject(event){
+            const { value: options } = event.target;
+            //console.log(event);
+            var value = [];
+            for (var i = 0; i < options.length; i++){
+                value.push(options[i]);
+            }
+            this.setState({
+                subjects: value
+            });
+            //console.log(this.state);
+        }
+
         render(){
-            console.log("render", this.context);
+            //console.log(this.subjects);
+            //console.log(process.env.REACT_APP_SERVER_HOST);
+            //console.log("render", this.context);
+            var classes = [5, 6, 7, 8, 9, 10];
+            console.log(this.context);
             return (<form  onSubmit={this.handleSubmit}>
                 <Snackbar open={this.state.error_text !== ''} autoHideDuration={6000} onClose={(event, reason) => {
                     if (reason === 'clickaway') {
@@ -94,11 +153,50 @@ const RegistrationForm = observer(
                 <TextField style={this.style} name="password" id="password" label="Password" type="password" value={this.state.password} onChange={this.handleInput} />
                 <TextField style={this.style} name="vk_ref" id="email" label="Contacts" value={this.state.vk_ref} onChange={this.handleInput} />
                 </div>
-                
+                <div>
+                    <FormControl style={this.formStyle} id="class" >
+                    <InputLabel>Класс</InputLabel>
+                    <Select style={this.style} value={this.state._class} onChange={this.handleClass}>
+                        {classes.map((_class) => (
+                            <MenuItem key={_class} value={_class}>{_class}</MenuItem>
+                        ))}
+                    </Select>
+                    </FormControl>
+                </div>
+                <FormControl style={this.formStyle} id="role" >
+                <InputLabel>Роль</InputLabel>
+                <Select style={this.style} value={this.state.roles} onChange={this.handleMenu.bind(this)}>
+                    <MenuItem value="USER">Ученик</MenuItem>
+                    <MenuItem value="TEACHER">Учитель</MenuItem>
+                </Select>
+                </FormControl>
+                { (this.state.roles == "TEACHER") && 
+                <FormControl id="subject" style={this.formStyle}>
+                    <Select
+                    multiple
+                    onChange={this.handleSubject}
+                    value={this.state.subjects}
+                    input={<Input/>}
+                    renderValue= {(selected) => (
+                        <div >
+                        {selected.map((value) => (
+                            <Chip key={value} label={value} />
+                        ))}
+                        </div>
+                    )} >
+                        {this.context.subjectStore.subjects.map((subject) => (
+                            <MenuItem key={subject} value={subject}>
+                                {subject}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                }
                 
                 <Button variant="contained" color="primary" type="submit">
                     Зарегестрироваться
                 </Button>
+
             </form>)
         }
 })

@@ -1,4 +1,3 @@
-require('dotenv').config();
 
 const express = require('express')
 const chalk = require('chalk');
@@ -9,8 +8,11 @@ const mongoose = require('mongoose');
 const fileUpload = require('express-fileupload');
 
 const Role = require('./models/role.js');
+const Subject = require('./models/subject.js');
 const router = require('./routes/index.js');
 const errorMiddleware = require('./middleware/errorMiddleware.js');
+
+require('dotenv').config();
 
 var app = express();
 
@@ -22,12 +24,20 @@ app.use(fileUpload({}));
 app.use('/api', router);
 app.use(errorMiddleware);
 
+const subjects = [
+    
+]
+
 start = async() => {
     try{
-        await mongoose.connect('mongodb+srv://kirigaya169:mXzuNyx9369LpeP@cluster0.zfvzb.mongodb.net/school_project?retryWrites=true&w=majority', {
+        await mongoose.connect(process.env.DB_ADDRESS, {
             useNewUrlParser: true,
         });
         var port = process.env.SERVER_PORT || 8000;
+        subjects.forEach((subject) => {
+            const subj = new Subject({value: subject});
+            subj.save();
+        })
         app.listen(port);
         console.log(`Server works on the port ${port}...`);
     } catch(e){
