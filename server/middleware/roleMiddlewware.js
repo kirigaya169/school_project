@@ -11,7 +11,8 @@ module.exports = function(roles){
             if (!token){
                 return res.status(403).json({message: "Пользователь не авторизован"});
             }
-            const {roles: userRoles} = jwt.verify(token, process.env.TOKEN_KEY);
+            const user = jwt.verify(token, process.env.TOKEN_KEY);
+            var userRoles = user.roles;
             var hasRole = false;
             console.log(userRoles);
             userRoles.forEach(role => {
@@ -22,6 +23,7 @@ module.exports = function(roles){
             if (!hasRole){
                 return res.status(403).json({message: "У вас нет доступа"});
             }
+            req.user = user;
             next();
         }catch(e){
             console.log(chalk.red(e));

@@ -27,13 +27,12 @@ function generateJWT(user){
 class UserController{
     async registration(req, res, next){
         var errors = validationResult(req);
-        console.log(errors.errors);
+        console.log(req.files);
         if (!errors.isEmpty()){
             return next(ApiError.badRequest(errors.errors[0].msg));
         }
+        console.log("body", req.body);
         var {name, email, username, password, _class, vk_ref, roles, subjects} = req.body;
-        console.log(req.body);
-        console.log(roles);
         const candidateByName = await User.findOne({username: username});
         const candidateByEmail = await User.findOne({email: email});
         if (candidateByName){
@@ -45,7 +44,8 @@ class UserController{
         var subjectsBD = [];
         for (var i = 0; i < subjects.length; i++){
             var subject = await Subject.findOne({value: subjects[i]});
-            if (!subject){
+            if (!subject && subjects.length !== []){
+                console.log(subjects[i]);
                 return next(ApiError.badRequest("Неправильный предмет"));
             }
             subjectsBD.push(subject.value);
@@ -71,7 +71,7 @@ class UserController{
             return next(ApiError.badRequest("Неправильный пароль!"));
         }
         const token = generateJWT(user);
-        res.json({token: token});
+        return res.json({token: token});
     }
 
     getUserData(req, res, next){
@@ -82,8 +82,6 @@ class UserController{
             });
             return res.json(userMap);
         })
-        
-        
     }
 }
 

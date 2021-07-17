@@ -4,17 +4,19 @@ import MuiAlert from '@material-ui/lab/Alert'
 import axios from 'axios'
 import {observer} from 'mobx-react'
 import StoreContext from '../context.js';
+import history from '../history.js'
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
 
 const LoginForm = observer(
-    class RegistrationForm extends React.Component{
+    class LoginForm extends React.Component{
 
         constructor(props, context){
+            console.log(props);
             super(props, context);
-            console.log(this.context);
+            
             
             this.state = {
                 password: '',
@@ -39,23 +41,28 @@ const LoginForm = observer(
             this.context.userStore.setIsAuth(true);
             console.log("success", this.context);
             this.setState({succees_text: "Запись успешно создана"});
+            history.push('/');
         }
 
-        handleSubmit(event){
+        async handleSubmit(event){
             console.log("submit", this.context);
             event.preventDefault();
             console.log(this.state);
             console.log(process.env.REACT_API_SERVER_HOST);
-            axios.post('http://127.0.0.1:9000/'+ "api/user/login", this.state).then((response) => {
-                this.successSend(response);
-                
-            }).catch((error) => {
-                console.log("error", error);
-                console.log(error.response.data);
-                this.setState({error_text: error.response.data});
-                this.errorMessage = error.response.data;
-            })
-            
+            try{
+            var data = await axios.post(process.env.REACT_APP_SERVER_HOST + "api/user/login", this.state)
+            console.log("data", data);
+            this.context.userStore.setUser(data.data.token);
+            this.context.userStore.setIsAuth(true);
+            console.log("success", this.context);
+            this.setState({succees_text: "Запись успешно создана"});
+            history.push('/');
+            }
+            catch(e){
+                var json = JSON.parse(e.request.response);
+                console.log(json.data);
+                this.setState({error_text: json.data});
+            }
         }
 
         handleInput(event){
