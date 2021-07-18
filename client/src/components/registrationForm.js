@@ -33,7 +33,6 @@ const RegistrationForm = observer(
                 email: '',
                 password: '',
                 vk_ref: '',
-                username: '',
                 roles: '',
                 subjects: [],
                 all_subjects: [],
@@ -92,7 +91,6 @@ const RegistrationForm = observer(
                 'email': this.state.email,
                 'password': this.state.password,
                 'vk_ref': this.state.vk_ref,
-                'username': this.state.username,
                 'roles': this.state.roles,
                 'subjects': this.state.subjects,
                 '_class': this.state._class,
@@ -101,7 +99,6 @@ const RegistrationForm = observer(
             formData.append('email', this.state.email);
             formData.append('password', this.state.password);
             formData.append('vk_ref', this.state.vk_ref);
-            formData.append('username', this.state.username);
             formData.append('roles', this.state.roles);
             formData.append('subjects', this.state.subjects);
             formData.append('_class', this.state._class);
@@ -175,7 +172,6 @@ const RegistrationForm = observer(
                 </Snackbar>
                 <div>
                     <TextField style={this.style} name="name" id="name" label="Name" value={this.state.name} onChange={this.handleInput} />
-                    <TextField style={this.style} name="username" id="login" label="Login" value={this.state.username} onChange={this.handleInput} />
                     <TextField style={this.style} name="email" id="email" label="Email" value={this.state.email} onChange={this.handleInput} />
                 </div>
                 <div>

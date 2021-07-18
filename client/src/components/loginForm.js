@@ -20,7 +20,7 @@ const LoginForm = observer(
             
             this.state = {
                 password: '',
-                username: '',
+                email: '',
                 succees_text: '',
                 error_text: '',
             }
@@ -50,13 +50,13 @@ const LoginForm = observer(
             console.log(this.state);
             console.log(process.env.REACT_API_SERVER_HOST);
             try{
-            var data = await axios.post(process.env.REACT_APP_SERVER_HOST + "api/user/login", this.state)
-            console.log("data", data);
-            this.context.userStore.setUser(data.data.token);
-            this.context.userStore.setIsAuth(true);
-            console.log("success", this.context);
-            this.setState({succees_text: "Запись успешно создана"});
-            history.push('/');
+                var data = await axios.post(process.env.REACT_APP_SERVER_HOST + "api/user/login", this.state)
+                console.log("data", data);
+                this.context.userStore.setUser(data.data.token);
+                this.context.userStore.setIsAuth(true);
+                console.log("success", this.context);
+                this.setState({succees_text: "Запись успешно создана"});
+                history.push('/');
             }
             catch(e){
                 var json = JSON.parse(e.request.response);

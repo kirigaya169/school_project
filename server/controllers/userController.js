@@ -12,7 +12,6 @@ function generateJWT(user){
     const payload = {
         id: user._id,
         name: user.name,
-        username: user.username, 
         email: user.email,
         roles: user.roles,
         vk_ref: user.vk_ref,
@@ -31,20 +30,20 @@ class UserController{
         if (!errors.isEmpty()){
             return next(ApiError.badRequest(errors.errors[0].msg));
         }
-        console.log("body", req.body);
-        var {name, email, username, password, _class, vk_ref, roles, subjects} = req.body;
-        const candidateByName = await User.findOne({username: username});
+        var {name, email, password, _class, vk_ref, roles, subjects} = req.body;
         const candidateByEmail = await User.findOne({email: email});
-        if (candidateByName){
-            return next(ApiError.badRequest("Пользователь с таким именем существует"));
-        }
         if (candidateByEmail){
             return next(ApiError.badRequest("Пользователь с таким email существует"));
         }
+        subjects = subjects.split(',');
+        console.log(subjects);
         var subjectsBD = [];
         for (var i = 0; i < subjects.length; i++){
             var subject = await Subject.findOne({value: subjects[i]});
-            if (!subject && subjects.length !== []){
+            if (subjects[i] == ''){
+                continue;
+            }
+            if (!subject){
                 console.log(subjects[i]);
                 return next(ApiError.badRequest("Неправильный предмет"));
             }
@@ -53,7 +52,7 @@ class UserController{
         var hashPassword = bcrypt.hashSync(password, 7);
         const user = new User({
             password: hashPassword,
-            name, username, class: _class, vk_ref, roles: [roles], subjects: subjectsBD,
+            name, class: _class, vk_ref, roles: [roles], subjects: subjectsBD, email,
         });
         await user.save();
         var token = generateJWT(user);
@@ -61,8 +60,8 @@ class UserController{
     }
 
     async login(req, res, next){
-        const {username, password} = req.body;
-        const user = await User.findOne({username: username});
+        const {email, password} = req.body;
+        const user = await User.findOne({email: email});
         if (!user){
             return next(ApiError.badRequest("Пользователя с таким именем не существует!"));
         }
