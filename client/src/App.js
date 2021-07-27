@@ -1,39 +1,47 @@
-import {Container} from '@material-ui/core'
-import RegistrationForm from './components/registrationForm.js'
-import RequestForm from './components/requestForm.js'
-import {Router, Switch, Route, Link, Redirect} from "react-router-dom"
-import React from 'react'
-import StoreContext from './context.js'
+import {Container, Toolbar} from '@material-ui/core';
+import RegistrationForm from './components/registrationForm.js';
+import RequestForm from './components/requestForm.js';
+import AdminPanel from './components/admin/index.js';
+import {Router, Switch, Route, Link, Redirect} from "react-router-dom";
+import React from 'react';
+import {UserContext} from './context.js';
 import {observer, Provider} from 'mobx-react';  
 import  LoginForm from './components/loginForm.js';
 import history from './history.js';
-import NavBar from './components/navBar.js'
+import NavBar from './components/navBar.js';
+import UserStore from './store/userStore.js';
 
 export const App = observer( 
 class App extends React.Component {
-  static contextType = StoreContext;
+  static contextType = UserContext;
   constructor(){
     super();
   }
   render(){
-    console.log(this.context.userStore);
-    return (
-      <Container maxWidth="xl">
+    console.log(new UserStore());
+    console.log("is auth", this.context.isAuth);
+    return (<div>
       <NavBar />
+      <Container maxWidth="xl">
+      <Toolbar />
         <Router history={history}>
         <Switch>
             <Route path='/user/registration'>
-              {!this.context.userStore.isAuth && <RegistrationForm />}
+              {!this.context.isAuth && <RegistrationForm />}
             </Route>
             <Route path='/user/login'>
-            {!this.context.userStore.isAuth && <LoginForm />}
+            {!this.context.isAuth && <LoginForm />}
             </Route>
             <Route path='/request'>
-            {this.context.userStore.isAuth && <RequestForm />} 
+            {this.context.isAuth && <RequestForm />} 
+            </Route>
+            <Route path='/admin'>
+              {(this.context.isAuth && this.context.user.roles.includes("ADMIN")) && <AdminPanel />}
             </Route>
           </Switch>
         </Router>
       </Container>
+      </div>
     );
   }
   

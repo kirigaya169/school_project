@@ -3,8 +3,9 @@ import {TextField, Button, Snackbar, MenuItem, FormControl, Select, InputLabel, 
 import MuiAlert from '@material-ui/lab/Alert'
 import axios from 'axios'
 import {observer} from 'mobx-react'
-import StoreContext from '../context.js';
+import {UserContext, SubjectContext} from '../context.js';
 import history from '../history.js'
+import subjectStore from '../store/subjectStore.js'
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -71,8 +72,8 @@ const RegistrationForm = observer(
         successSend(response){
             //onsole.log("handle", this.context);
             //console.log(response.data);
-            this.context.userStore.setUser(response.data.token);
-            this.context.userStore.setIsAuth(true);
+            this.context.setUser(response.data.token);
+            this.context.setIsAuth(true);
             //console.log("success", this.context);
             this.setState({succees_text: "Запись успешно создана"});
             history.push('/');
@@ -209,7 +210,7 @@ const RegistrationForm = observer(
                         ))}
                         </div>
                     )} >
-                        {this.context.subjectStore.subjects.map((subject) => (
+                        {subjectStore.subjects.map((subject) => (
                             <MenuItem key={subject} value={subject}>
                                 {subject}
                             </MenuItem>
@@ -226,6 +227,6 @@ const RegistrationForm = observer(
         }
 })
 
-RegistrationForm.contextType = StoreContext;
+RegistrationForm.contextType = UserContext;
 
 export default RegistrationForm;

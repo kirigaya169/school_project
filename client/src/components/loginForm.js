@@ -3,7 +3,7 @@ import {TextField, Button, Snackbar} from '@material-ui/core'
 import MuiAlert from '@material-ui/lab/Alert'
 import axios from 'axios'
 import {observer} from 'mobx-react'
-import StoreContext from '../context.js';
+import {UserContext} from '../context.js';
 import history from '../history.js'
 
 function Alert(props) {
@@ -37,8 +37,8 @@ const LoginForm = observer(
         successSend(response){
             console.log("handle", this.context);
             console.log(response.data);
-            this.context.userStore.setUser(response.data.token);
-            this.context.userStore.setIsAuth(true);
+            this.context.setUser(response.data.token);
+            this.context.setIsAuth(true);
             console.log("success", this.context);
             this.setState({succees_text: "Запись успешно создана"});
             history.push('/');
@@ -52,13 +52,14 @@ const LoginForm = observer(
             try{
                 var data = await axios.post(process.env.REACT_APP_SERVER_HOST + "api/user/login", this.state)
                 console.log("data", data);
-                this.context.userStore.setUser(data.data.token);
-                this.context.userStore.setIsAuth(true);
+                this.context.setUser(data.data.token);
+                this.context.setIsAuth(true);
                 console.log("success", this.context);
                 this.setState({succees_text: "Запись успешно создана"});
                 history.push('/');
             }
             catch(e){
+                console.log("error", e);
                 var json = JSON.parse(e.request.response);
                 console.log(json.data);
                 this.setState({error_text: json.data});
@@ -90,7 +91,7 @@ const LoginForm = observer(
                     </Alert>
                 </Snackbar>
                 <div>
-                    <TextField style={this.style} name="username" id="login" label="Login" value={this.state.username} onChange={this.handleInput} />
+                    <TextField style={this.style} name="email" id="email" label="E-mail" value={this.state.email} onChange={this.handleInput} />
                 </div>
                 <div>
                 <TextField style={this.style} name="password" id="password" label="Password" type="password" value={this.state.password} onChange={this.handleInput} />
@@ -104,6 +105,6 @@ const LoginForm = observer(
         }
 })
 
-LoginForm.contextType = StoreContext;
+LoginForm.contextType = UserContext;
 
 export default LoginForm;

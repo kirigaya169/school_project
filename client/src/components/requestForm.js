@@ -4,8 +4,9 @@ import {observer} from 'mobx-react';
 import {TextField, FormControl, Select, InputLabel, MenuItem, Button, Snackbar} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import {DateTimePicker} from '@material-ui/pickers';
-import StoreContext from '../context.js';
+import {UserContext} from '../context.js';
 import MuiAlert from '@material-ui/lab/Alert';
+import subjectStore from '../store/subjectStore.js';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 var RequestForm = observer(function(props){
     const classes = useStyles();
     var dt = new Date();
-    var context = useContext(StoreContext);
+    var context = useContext(UserContext);
     console.log(context);
     const [theme, setTheme] = React.useState('');
     const [description, setDescription] = React.useState('');
@@ -41,7 +42,7 @@ var RequestForm = observer(function(props){
         try{
           var data = await axios.post(process.env.REACT_APP_SERVER_HOST + 'api/requests/', formData, {
             headers: {
-              'Authorization': 'Baerar ' + context.userStore.token, 
+              'Authorization': 'Baerar ' + context.token, 
             }
           });
           setMessage(data.data.data);
@@ -90,7 +91,7 @@ var RequestForm = observer(function(props){
               setSubject(e.target.value);
             }}
             >
-            {context.subjectStore.subjects.map((subject) => (
+            {subjectStore.subjects.map((subject) => (
               <MenuItem key={subject} value={subject}>{subject}</MenuItem>
             ))}
             </Select>

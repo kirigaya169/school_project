@@ -24,5 +24,6 @@ export class SubjectStore{
         console.log("subjects", this.subjects);
     }
 }
+var subjectStore = new SubjectStore();
 
-export default SubjectStore;
+export default subjectStore;

@@ -8,10 +8,13 @@ import IconButton from '@material-ui/core/IconButton'
 import Link from '@material-ui/core/Link'
 import AddIcon from '@material-ui/icons/Add';
 import history from '../history.js'
+import SettingsIcon from '@material-ui/icons/Settings';
+import { UserContext } from '../context.js';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    zIndex: 1300,
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -23,10 +26,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function NavBar() {
   const classes = useStyles();
+  const context = React.useContext(UserContext);
 
   return (
-    <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="fixed" className={classes.root}>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
                 <Link color='inherit' onClick={() => {
@@ -34,11 +37,18 @@ export default function NavBar() {
                 }}>Главная</Link>
           </Typography>
           <div>
-          <IconButton className={classes.title}aria-label="подать заявку" style={{color: 'white'}} onClick={() => {
+
+            {(context.isAuth && context.user.roles.includes("ADMIN")) && <IconButton className={classes.title} aria-label="админ-панель" style={{color: 'white'}} onClick={() => {
+              history.push('/admin');
+            }}>
+                <SettingsIcon />
+            </IconButton>}
+
+          {context.isAuth && <IconButton className={classes.title} aria-label="подать заявку" style={{color: 'white'}} onClick={() => {
                 history.push('/request');
             }}>
                 <AddIcon />
-            </IconButton>
+            </IconButton>}
           <Button color="inherit" onClick={() => {
               history.push('user/login');
           }}>Login</Button>
@@ -46,6 +56,5 @@ export default function NavBar() {
             
         </Toolbar>
       </AppBar>
-    </div>
   );
 }

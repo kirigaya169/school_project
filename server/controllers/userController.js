@@ -61,9 +61,10 @@ class UserController{
 
     async login(req, res, next){
         const {email, password} = req.body;
+        console.log(req.body);
         const user = await User.findOne({email: email});
         if (!user){
-            return next(ApiError.badRequest("Пользователя с таким именем не существует!"));
+            return next(ApiError.badRequest("Пользователя с таким email не существует!"));
         }
         const validPassword = bcrypt.compareSync(password, user.password);
         if (!validPassword){
@@ -74,10 +75,11 @@ class UserController{
     }
 
     getUserData(req, res, next){
-        var userMap = {};
+        var userMap = [];
         User.find({}, function(err, users){
             users.forEach(function(user){
-                userMap[user._id] = user;
+                if (req.user.email != user.email)
+                    userMap.push(user);
             });
             return res.json(userMap);
         })
