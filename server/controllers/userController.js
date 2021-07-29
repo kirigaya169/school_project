@@ -26,7 +26,6 @@ function generateJWT(user){
 class UserController{
     async registration(req, res, next){
         var errors = validationResult(req);
-        console.log(req.files);
         if (!errors.isEmpty()){
             return next(ApiError.badRequest(errors.errors[0].msg));
         }
@@ -74,15 +73,41 @@ class UserController{
         return res.json({token: token});
     }
 
-    getUserData(req, res, next){
+    async getUserData(req, res, next){
         var userMap = [];
         User.find({}, function(err, users){
             users.forEach(function(user){
                 if (req.user.email != user.email)
                     userMap.push(user);
             });
-            return res.json(userMap);
+            return res.json({users: userMap});
         })
+    }
+
+    async ChangeAdminRole(req, res, next){
+        const {email} = req.body;
+        if (!email){
+            return next(ApiError.badRequest("Укажите пользователя!"));
+        }
+        const user = await User.findOne({email});
+        if (!user){
+            return next(ApiError.badRequest("Неправильный email"));
+        }
+        console.log(user.roles);
+        var result = false;
+        const roles = user.roles;
+        const index = roles.indexOf("ADMIN");
+        if (index > -1){
+            roles.splice(index, 1);
+        }
+        else{
+            result = true;
+            roles.push("ADMIN");
+        }
+        user.roles = roles;
+        user.save();
+        console.log("saved");
+        return res.json({data: result});
     }
 }
 

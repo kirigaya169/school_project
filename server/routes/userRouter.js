@@ -19,4 +19,6 @@ router.post('/login', controller.login);
 
 router.get('/', roleMiddleware(["ADMIN"]), controller.getUserData);
 
+router.post('/change_role', roleMiddleware(["ADMIN"]), controller.ChangeAdminRole);
+
 module.exports = router;

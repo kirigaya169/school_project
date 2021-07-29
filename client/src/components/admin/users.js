@@ -8,7 +8,6 @@ import UserCard from './userCard.js';
 export default observer(function(props) {
     const context = React.useContext(UserContext);
     const [users, setUsers] = React.useState([]);
-    console.log('success');
     const getUsers = async(mounted) => {
         if (!mounted){
             return;
@@ -19,8 +18,8 @@ export default observer(function(props) {
                 headers: {
                     'Authorization' : 'Baerar ' + context.token},
             })
-            console.log(data.data);
-            setUsers(data.data);
+            console.log(data.data.users);
+            setUsers(data.data.users);
         }
         catch(e){
             if (e.response.status == '403'){
@@ -35,6 +34,7 @@ export default observer(function(props) {
         getUsers(mounted);
         return () => mounted = false;
     }, [])
+
     console.log('render');
     return (<div>
         <Typography variant="h2" gutterBottom>
