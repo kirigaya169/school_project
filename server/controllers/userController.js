@@ -9,6 +9,7 @@ const ApiError = require('../error.js');
 const Subject = require('../models/subject.js');
 
 function generateJWT(user){
+    var key = process.env.TOKEN_KEY || "1a2b-3c4d-5e6f-7g8h";
     const payload = {
         id: user._id,
         name: user.name,
@@ -17,7 +18,7 @@ function generateJWT(user){
         class: user.class,
     }
     return jwt.sign(payload, 
-        process.env.TOKEN_KEY, {
+        key, {
             expiresIn: '24h'
         })
 }
