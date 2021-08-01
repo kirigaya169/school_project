@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import axios from 'axios';
 import {UserContext} from '../../context.js'
+import { observer } from 'mobx-react'
 
 const useStyles = makeStyles({
     root: {
@@ -15,10 +16,9 @@ const useStyles = makeStyles({
 
 })
 
-export default function UserCard(props){
+export default observer(function UserCard(props){
     const classes = useStyles();
     const context = React.useContext(UserContext);
-    console.log(context.token);
     const user = props.user;
     const [isAdmin, setIsAdmin] = React.useState(user.roles.includes("ADMIN"));
     const changeAdminRole = async() => {
@@ -36,11 +36,10 @@ export default function UserCard(props){
         catch(e) {
             console.log(e.response);
             if (e.response.status == "403"){
-            
+                context.setIsAuth(false);
             }
         }
     }
-    console.log("isAdmin", isAdmin);
     return (
     <Box m={1}>
         <Card className={classes.root}>
@@ -73,4 +72,4 @@ export default function UserCard(props){
         </Card>
     </Box>
     )
-}
+})

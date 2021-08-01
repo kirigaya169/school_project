@@ -1,7 +1,8 @@
 const {Schema, model} = require('mongoose');
 
 const Request = new Schema({
-    author: {type: Schema.Types.ObjectId, ref: 'User'},
+    author: {type: String},
+    author_email: {type: String, ref: 'User'},
     title: {type: String},
     description: {type: String},
     subject: {type: String, ref: 'Subject'},

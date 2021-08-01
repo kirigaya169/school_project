@@ -49,6 +49,9 @@ var RequestForm = observer(function(props){
           console.log(data.data.data);
         }
         catch(e){
+          if (e.response.status == "403"){
+            context.setIsAuth(false);
+          }
           console.log(e);
         }
         
@@ -77,7 +80,7 @@ var RequestForm = observer(function(props){
           }}></TextField>
           </div>
           <div>
-          <TextField label="Описание" value={description} onChange={(e) => {
+          <TextField multiline   label="Описание" value={description} onChange={(e) => {
             setDescription(e.target.value);
           }}></TextField>
           </div>

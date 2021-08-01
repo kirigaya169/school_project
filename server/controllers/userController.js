@@ -109,6 +109,26 @@ class UserController{
         console.log("saved");
         return res.json({data: result});
     }
+
+    async getUsersBySubject(req, res, next){
+        const subject = req.query.subject;
+        User.find({}, (err, result) => {
+            if (err){
+                console.log(err);
+                return next(ApiError.internal("Что то пошло не так"));
+            }
+            const users = [];
+            for (let user_id = 0; user_id < result.length; user_id++){
+                var user = result[user_id];
+                console.log(user, subject);
+                if (user.subjects.includes(subject)){
+                    users.push(user);
+                }
+            }
+            console.log(users);
+            return res.json(users);
+        });
+    }
 }
 
 module.exports = new UserController();

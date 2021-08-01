@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import UserView from './users.js'
+import RequestsView from './requests.js';
 import {UserContext} from '../../context.js';
 
 const drawerWidth = 240;
@@ -30,10 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AdminPanel(){
     const classes = useStyles();
-    console.log('admin');
-    var style = {
-        zIndex: 0,
-    }
+    const [current, setCurrent] = React.useState(<UserView />);
     return(
         <div className={classes.root}>
         <Drawer
@@ -48,11 +46,15 @@ export default function AdminPanel(){
             <Toolbar />
             <div className={classes.drawerContainer}>
             <List>
-                <ListItem button>
+                <ListItem  button onClick={() => {
+                    setCurrent(<UserView />);
+                }}>
                     <ListItemIcon><AccountCircleIcon /> </ListItemIcon>
                     <ListItemText>Пользователи</ListItemText>
                 </ListItem>
-                <ListItem button>
+                <ListItem selected={current == <RequestsView />} button onClick={() => {
+                    setCurrent(<RequestsView />);
+                }}>
                     <ListItemIcon><NotificationsIcon /> </ListItemIcon>
                     <ListItemText>Заявки</ListItemText>
                 </ListItem>
@@ -60,7 +62,7 @@ export default function AdminPanel(){
             </div>
             </div>
         </Drawer>
-        <UserView />
+        {current}
     </div>
     );
 }

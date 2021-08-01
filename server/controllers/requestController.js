@@ -6,9 +6,11 @@ const ApiError = require('../error.js');
 class RequestController{
     async create(req, res){
         var {title, description, subject, date} = req.body;
-        var id = req.user.id;
+        var email = req.user.email;
+        var author = req.user.name;
         var request = new Request({
-            title, description, id, subject, date
+            author,
+            title, description, author_email: email, subject, date
         });
         await request.save();
         return res.json({data: "Запись успешно создана!"});
@@ -26,31 +28,32 @@ class RequestController{
     }
 
     async getAll(req, res, next){
-        var requests = {};
+        var requests = [];
         await Request.find({}, function(err, reqs){
             reqs.forEach(function(req){
-                requests[user._id] = req;
+                requests.push(req);
             });
-            return res.json(requests);
+            return res.json({requests});
         })
     }
 
     async accept(req, res, next){
         const id = req.query.id;
         console.log(req.query);
-        const {name} = req.body;
+        const {email} = req.body;
         console.log(id);
         var request = await Request.findById(id);
         if (!request){
             return next(ApiError.badRequest("Неправильная заявка"));
         }
-        const teacher = await User.findOne({name});
+        const teacher = await User.findOne({email});
         if (!teacher){
             return next(ApiError.badRequest("Учитель с таким именем не зарегистрирован на сайте!"));
         }
+        const requestAuthor = await User.findOne({email: request.author_email});
         const lesson = new Lesson({
             teacher: teacher._id,
-            pupil: request.author,
+            pupil: requestAuthor._id,
             title: request.title,
             description: request.description,
             subject: request.subject,
@@ -66,14 +69,14 @@ class RequestController{
     }
 
     async reject(req, res, next){
-        const id = req.params.id;
+        const id = req.query.id;
         await Request.findOneAndDelete({_id: id}, (err) => {
             if (err){
                 console.log(err);
                 return next(ApiError.badRequest("Не удалось удалить запись"));
             }
         });
-        return res.json({data: "Запись успешно удалена!"});
+        return res.json({data: "Запись успешно удалена"});
     }
 }
 

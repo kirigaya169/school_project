@@ -6,8 +6,12 @@ const { request } = require('express');
 
 const router = new express();
 
-router.post('/', authMiddleware,requestController.create);
+router.post('/', authMiddleware, requestController.create);
+
+router.get('/', roleMiddleware(['ADMIN']), requestController.getAll);
 
 router.post('/accept', roleMiddleware(['ADMIN']), requestController.accept);
+
+router.post('/reject', roleMiddleware(['ADMIN']), requestController.reject);
 
 module.exports = router;
