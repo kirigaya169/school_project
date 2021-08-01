@@ -99,7 +99,6 @@ const RegistrationForm = observer(
             formData.append('name', this.state.name);
             formData.append('email', this.state.email);
             formData.append('password', this.state.password);
-            formData.append('vk_ref', this.state.vk_ref);
             formData.append('roles', this.state.roles);
             formData.append('subjects', this.state.subjects);
             formData.append('_class', this.state._class);
@@ -172,12 +171,13 @@ const RegistrationForm = observer(
                     </Alert>
                 </Snackbar>
                 <div>
-                    <TextField style={this.style} name="name" id="name" label="Name" value={this.state.name} onChange={this.handleInput} />
+                    <TextField style={this.style} name="name" id="name" label="Имя" value={this.state.name} onChange={this.handleInput} />
+                </div>
+                <div>
                     <TextField style={this.style} name="email" id="email" label="Email" value={this.state.email} onChange={this.handleInput} />
                 </div>
                 <div>
                 <TextField style={this.style} name="password" id="password" label="Password" type="password" value={this.state.password} onChange={this.handleInput} />
-                <TextField style={this.style} name="vk_ref" id="email" label="Contacts" value={this.state.vk_ref} onChange={this.handleInput} />
                 </div>
                 <div>
                     <FormControl style={this.formStyle} id="class" >
@@ -198,6 +198,7 @@ const RegistrationForm = observer(
                 </FormControl>
                 { (this.state.roles == "TEACHER") && 
                 <FormControl id="subject" style={this.formStyle}>
+                <InputLabel>Предметы</InputLabel>
                     <Select
                     multiple
                     onChange={this.handleSubject}
@@ -218,10 +219,11 @@ const RegistrationForm = observer(
                     </Select>
                 </FormControl>
                 }
-                
-                <Button variant="contained" color="primary" type="submit">
-                    Зарегестрироваться
-                </Button>
+                <div>
+                    <Button variant="contained" color="primary" type="submit">
+                        Зарегестрироваться
+                    </Button>
+                </div>
 
             </form>)
         }

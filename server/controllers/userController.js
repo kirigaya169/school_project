@@ -14,7 +14,6 @@ function generateJWT(user){
         name: user.name,
         email: user.email,
         roles: user.roles,
-        vk_ref: user.vk_ref,
         class: user.class,
     }
     return jwt.sign(payload, 
@@ -29,7 +28,7 @@ class UserController{
         if (!errors.isEmpty()){
             return next(ApiError.badRequest(errors.errors[0].msg));
         }
-        var {name, email, password, _class, vk_ref, roles, subjects} = req.body;
+        var {name, email, password, _class, roles, subjects} = req.body;
         const candidateByEmail = await User.findOne({email: email});
         if (candidateByEmail){
             return next(ApiError.badRequest("Пользователь с таким email существует"));
@@ -51,7 +50,7 @@ class UserController{
         var hashPassword = bcrypt.hashSync(password, 7);
         const user = new User({
             password: hashPassword,
-            name, class: _class, vk_ref, roles: [roles], subjects: subjectsBD, email,
+            name, class: _class, roles: [roles], subjects: subjectsBD, email,
         });
         await user.save();
         var token = generateJWT(user);

@@ -1,6 +1,7 @@
 import {Container, Toolbar} from '@material-ui/core';
 import RegistrationForm from './components/registrationForm.js';
 import RequestForm from './components/requestForm.js';
+import MainPage from './components/main.js';
 import AdminPanel from './components/admin/index.js';
 import {Router, Switch, Route, Link, Redirect} from "react-router-dom";
 import React from 'react';
@@ -26,10 +27,11 @@ class App extends React.Component {
       <Toolbar />
         <Router history={history}>
         <Switch>
-            <Route path='/user/registration'>
+            
+            <Route path='/registration'>
               {!this.context.isAuth && <RegistrationForm />}
             </Route>
-            <Route path='/user/login'>
+            <Route path='/login'>
             {!this.context.isAuth && <LoginForm />}
             </Route>
             <Route path='/request'>
@@ -37,6 +39,9 @@ class App extends React.Component {
             </Route>
             <Route path='/admin'>
               {(this.context.isAuth && this.context.user.roles.includes("ADMIN")) && <AdminPanel />}
+            </Route>
+            <Route path='/'>
+              <MainPage />
             </Route>
           </Switch>
         </Router>

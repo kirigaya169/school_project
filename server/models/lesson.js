@@ -1,8 +1,10 @@
 const {Schema, model} = require('mongoose');
 
 const Lesson = new Schema({
-    teacher: {type: Schema.Types.ObjectId, ref: 'User'},
-    pupil: {type: Schema.Types.ObjectId, ref: 'User'},
+    teacher_name: {type: String},
+    teacher: {type: String},
+    pupil_name: {type: String},
+    pupil: {type: String},
     title: {type: String},
     description: {type: String},
     subject: {type: String, ref: 'Subject'},

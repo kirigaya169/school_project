@@ -10,7 +10,7 @@ class RequestController{
         var author = req.user.name;
         var request = new Request({
             author,
-            title, description, author_email: email, subject, date
+            title, description, author_email: email, subject, date: new Date(date)
         });
         await request.save();
         return res.json({data: "Запись успешно создана!"});
@@ -52,12 +52,14 @@ class RequestController{
         }
         const requestAuthor = await User.findOne({email: request.author_email});
         const lesson = new Lesson({
-            teacher: teacher._id,
-            pupil: requestAuthor._id,
+            teacher: teacher.email,
+            teacher_name: teacher.name,
+            pupil: requestAuthor.email,
+            pupil_name: requestAuthor.name,
             title: request.title,
             description: request.description,
             subject: request.subject,
-            date: request.date,
+            date: new Date(request.date),
         });
         await lesson.save();
         await Request.findOneAndDelete({_id: id}, (err) =>{
