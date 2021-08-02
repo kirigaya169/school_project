@@ -23,7 +23,7 @@ class App extends React.Component {
       <NavBar />
       <Container maxWidth="xl">
       <Toolbar />
-        <HashRouter basename='/' history={history}>
+        <HashRouter basename={process.env.PUBLIC_URL} history={history}>
         <Switch>
             
             <Route path='/registration'>
