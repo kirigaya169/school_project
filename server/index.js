@@ -35,10 +35,15 @@ const subjects = [
 
 start = async() => {
     try{
+<<<<<<< HEAD
         await mongoose.connect(dbAdress, {
+=======
+        const db = process.env.DB_ADDRESS || "mongodb+srv://kirigaya169:mXzuNyx9369LpeP@cluster0.zfvzb.mongodb.net/school_project?retryWrites=true&w=majority";
+        await mongoose.connect(db, {
+>>>>>>> main
             useNewUrlParser: true,
         });
-        var port = process.env.SERVER_PORT || 8000;
+        var port = process.env.PORT || 8000;
         subjects.forEach((subject) => {
             const subj = new Subject({value: subject});
             subj.save();
