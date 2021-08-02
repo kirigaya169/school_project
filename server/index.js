@@ -37,7 +37,7 @@ start = async() => {
         await mongoose.connect(db, {
             useNewUrlParser: true,
         });
-        var port = process.env.SERVER_PORT || 8000;
+        var port = process.env.PORT || 8000;
         subjects.forEach((subject) => {
             const subj = new Subject({value: subject});
             subj.save();
