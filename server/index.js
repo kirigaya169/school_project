@@ -33,7 +33,8 @@ const subjects = [
 
 start = async() => {
     try{
-        await mongoose.connect(process.env.DB_ADDRESS, {
+        const db = process.env.DB_ADDRESS || "mongodb+srv://kirigaya169:mXzuNyx9369LpeP@cluster0.zfvzb.mongodb.net/school_project?retryWrites=true&w=majority";
+        await mongoose.connect(db, {
             useNewUrlParser: true,
         });
         var port = process.env.SERVER_PORT || 8000;
