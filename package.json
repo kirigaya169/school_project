@@ -1,0 +1,19 @@
+{
+  "name": "shestuha",
+  "version": "1.0.0",
+  "description": "This example is so cool.",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd server/ && npm i && node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "example",
+    "heroku"
+  ],
+  "author": "Gusev Grigory",
+  "license": "MIT",
+  "engines": {
+    "node": "16.x"
+  }
+}
