@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { observer } from 'mobx-react';
 import axios from 'axios';
 import { UserContext } from '../../context';
+import serverHost from '../../config';
 
 const useStyles = makeStyles({
     root: {
@@ -20,7 +21,6 @@ const useStyles = makeStyles({
 })
 
 const RequestDialog = function(props){
-    console.log(props);
     const classes = useStyles();
     const context = React.useContext(UserContext);
     const {onClose, open, request, setOpen, setIsDeleted} = props;
@@ -30,9 +30,7 @@ const RequestDialog = function(props){
 
     React.useEffect(async() => {
         try{
-            console.log(request.subject);
-            const data = await axios.get(process.env.REACT_APP_SERVER_HOST + 'api/user/subject', {params: {subject: request.subject}});
-            console.log(data);
+            const data = await axios.get(serverHost + 'api/user/subject', {params: {subject: request.subject}});
             setTeachers(data.data);
         }
         catch(e){
@@ -49,7 +47,7 @@ const RequestDialog = function(props){
 
     const onReject = async() => {
         try{
-            const data = await axios.post(process.env.REACT_APP_SERVER_HOST + 'api/requests/reject', null,
+            const data = await axios.post(serverHost + 'api/requests/reject', null,
             {
                 params: {
                     id: request._id,
@@ -58,7 +56,6 @@ const RequestDialog = function(props){
                     'Authorization': 'Baerar ' + context.token,
                 }
             });
-            console.log(data);
             setOpen(false);
             setIsDeleted(true);
         }
@@ -76,12 +73,11 @@ const RequestDialog = function(props){
 
     const onChange = (e) => {
         setTeacher(e.target.value);
-        console.log(teacher);
     }
 
     const onAcceptButton = async() => {
         try{
-            const data = axios.post(process.env.REACT_APP_SERVER_HOST + 'api/requests/accept', {email: teacher}, {
+            const data = axios.post(serverHost + 'api/requests/accept', {email: teacher}, {
                 params:{
                     id: request._id,
                 },
@@ -156,7 +152,6 @@ export default observer(function RequestCard(props){
         setDialogOpen(false);
     }
     
-    console.log("props", props);
     return (<div>{isDeleted ? null :
         <Box m={2}>
             <Card className={classes.root}>

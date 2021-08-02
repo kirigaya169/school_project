@@ -2,7 +2,6 @@ import jwt_decode from 'jwt-decode';
 import {makeObservable, action, observable, extendObservable, autorun, toJS} from 'mobx'
 
 function autoSave(store, save) {
-    console.log("save");
     let firstRun = true;
     autorun(() => {
         const json = JSON.stringify(toJS(store));
@@ -33,7 +32,6 @@ export class UserStore{
     }
 
     setUser(token){
-        console.log("token", token);
         if (token){
             this.token = token;
             this.user = jwt_decode(token);
@@ -61,7 +59,6 @@ export class UserStore{
 
     save(json){
         sessionStorage.setItem('user-store', json);
-        console.log(sessionStorage.getItem('user-store'));
     }
 }
 

@@ -1,10 +1,11 @@
 import {makeAutoObservable} from 'mobx';
 import axios from 'axios';
+import serverHost from '../config';
 
 export class SubjectStore{
     constructor() {
         this.subjects = [];
-        axios.get(process.env.REACT_APP_SERVER_HOST + 'api/subjects').then((response) =>{
+        axios.get(serverHost + 'api/subjects').then((response) =>{
             this.sendSubjects(response);
         });
         makeAutoObservable(this);
@@ -21,7 +22,6 @@ export class SubjectStore{
             subj.push(subjects[i].value);
         }
         this.subjects = subj;
-        console.log("subjects", this.subjects);
     }
 }
 var subjectStore = new SubjectStore();

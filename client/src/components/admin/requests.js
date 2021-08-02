@@ -4,23 +4,22 @@ import { UserContext } from '../../context';
 import { observer } from 'mobx-react';
 import axios from 'axios';
 import RequestCard from './requestCard';
+import serverHost from '../../config';
 
 export default observer( function RequestsView(){
     const context = React.useContext(UserContext);
     const [requests, setRequests] = React.useState([]);
 
     const getRequests = async(mounted) => {
-        console.log(mounted);
         if (!mounted){
             return;
         }
         try{
-            const data = await axios.get(process.env.REACT_APP_SERVER_HOST + 'api/requests/', {
+            const data = await axios.get(serverHost + 'api/requests/', {
                 headers: {
                     'Authorization': 'Baerar ' + context.token,
                 }
             });
-            console.log(data.data);
             setRequests(data.data.requests);
         }
         catch(e){

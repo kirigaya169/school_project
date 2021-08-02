@@ -6,6 +6,7 @@ import {observer} from 'mobx-react'
 import {UserContext, SubjectContext} from '../context.js';
 import history from '../history.js'
 import subjectStore from '../store/subjectStore.js'
+import serverHost from '../config.js'
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -14,7 +15,7 @@ function Alert(props) {
 const RegistrationForm = observer(
     class RegistrationForm extends React.Component{
 
-        static MIN_CLASS = 5;
+        static MIN_CLASS = 1;
         static MAX_CLASS = 11;
 
         constructor(props, context){
@@ -44,7 +45,7 @@ const RegistrationForm = observer(
             }
             
             this.classes = [5, 6, 7, 8, 9, 10];
-            axios.get(process.env.REACT_APP_SERVER_HOST + 'api/subjects').then((response) =>{
+            axios.get(serverHost + 'api/subjects').then((response) =>{
                 this.sendSubjects(response);
             });
             this.style = {
@@ -103,9 +104,6 @@ const RegistrationForm = observer(
             formData.append('subjects', this.state.subjects);
             formData.append('_class', this.state._class);
             formData.append('avatar', this.state.photo);
-            for (let [key, value] of formData.entries()) { 
-                console.log(key, value);
-              }
             //console.log("process", process.env.REACT_APP_SERVER_HOST);
             axios.post(process.env.REACT_APP_SERVER_HOST + "api/user/registration", formData
             ).then((response) => {
@@ -113,7 +111,6 @@ const RegistrationForm = observer(
                 
             }).catch((error) => {
                 console.log("error", error);
-                console.log(error.response.data.data);
                 this.setState({error_text: error.response.data.data});
                 this.errorMessage = error.response.data;
             })
@@ -129,7 +126,6 @@ const RegistrationForm = observer(
         }
 
         handleMenu(event){
-            console.log(this);
             this.setState({roles: event.target.value});
             //console.log("menu", this.state.roles[0]);
         }
@@ -155,8 +151,7 @@ const RegistrationForm = observer(
             //console.log(this.subjects);
             //console.log(process.env.REACT_APP_SERVER_HOST);
             //console.log("render", this.context);
-            var classes = [5, 6, 7, 8, 9, 10];
-            console.log(this.context);
+            var classes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
             return (<form  onSubmit={this.handleSubmit} >
                 <Snackbar open={this.state.error_text !== ''} autoHideDuration={6000} onClose={(event, reason) => {
                     if (reason === 'clickaway') {   

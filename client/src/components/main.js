@@ -4,6 +4,7 @@ import {Typography, TableRow, TableCell, IconButton, Table, TableContainer, Tabl
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { makeStyles } from '@material-ui/core/styles';
+import serverHost from '../config';
 
 const useRowStyles = makeStyles({
     root: {
@@ -61,14 +62,13 @@ export default function MainPage(){
 
     React.useEffect(async() => {
         try{
-            const data = await axios.get(process.env.REACT_APP_SERVER_HOST + 'api/lessons/');
+            const data = await axios.get(serverHost + 'api/lessons/');
             //console.log(data.data.lessons);
             var lessons_data = data.data.lessons;
             lessons_data.sort(function(a, b){
                 return new Date(b.date) - new Date(a.date);
             });
             setLessons(lessons_data);
-            console.log(lessons);
         }
         catch(e){
             console.log(e);

@@ -19,8 +19,6 @@ class App extends React.Component {
     super();
   }
   render(){
-    console.log(new UserStore());
-    console.log("is auth", this.context.isAuth);
     return (<div>
       <NavBar />
       <Container maxWidth="xl">
