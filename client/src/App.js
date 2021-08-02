@@ -26,19 +26,19 @@ class App extends React.Component {
         <HashRouter history={history}>
         <Switch>
             
-            <Route path='/school_project/registration'>
+            <Route path='/registration'>
               {!this.context.isAuth && <RegistrationForm />}
             </Route>
-            <Route path='/school_project/login'>
+            <Route path='/login'>
             {!this.context.isAuth && <LoginForm />}
             </Route>
-            <Route path='/school_project/request'>
+            <Route path='/request'>
             {this.context.isAuth && <RequestForm />} 
             </Route>
-            <Route path='/school_project/admin'>
+            <Route path='/admin'>
               {(this.context.isAuth && this.context.user.roles.includes("ADMIN")) && <AdminPanel />}
             </Route>
-            <Route path='/school_project/'>
+            <Route path='/'>
               <MainPage />
             </Route>
           </Switch>
