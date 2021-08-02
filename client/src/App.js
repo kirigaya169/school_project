@@ -23,7 +23,7 @@ class App extends React.Component {
       <NavBar />
       <Container maxWidth="xl">
       <Toolbar />
-        <HashRouter history={history}>
+        <HashRouter basename='/' history={history}>
         <Switch>
             
             <Route path='/registration'>
