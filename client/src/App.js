@@ -3,7 +3,7 @@ import RegistrationForm from './components/registrationForm.js';
 import RequestForm from './components/requestForm.js';
 import MainPage from './components/main.js';
 import AdminPanel from './components/admin/index.js';
-import {Router, Switch, Route, Link, Redirect} from "react-router-dom";
+import {HashRouter, Switch, Route, Link, Redirect} from "react-router-dom";
 import React from 'react';
 import {UserContext} from './context.js';
 import {observer, Provider} from 'mobx-react';  
@@ -23,7 +23,7 @@ class App extends React.Component {
       <NavBar />
       <Container maxWidth="xl">
       <Toolbar />
-        <Router history={history}>
+        <HashRouter history={history}>
         <Switch>
             
             <Route path='/school_project/registration'>
@@ -42,7 +42,7 @@ class App extends React.Component {
               <MainPage />
             </Route>
           </Switch>
-        </Router>
+        </HashRouter>
       </Container>
       </div>
     );
