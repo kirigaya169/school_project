@@ -20,10 +20,10 @@ class App extends React.Component {
   }
   render(){
     return (<div>
+    <HashRouter basename={process.env.PUBLIC_URL} history={history}>
       <NavBar />
       <Container maxWidth="xl">
       <Toolbar />
-        <HashRouter basename={process.env.PUBLIC_URL} history={history}>
         <Switch>
             
             <Route path='/registration'>
@@ -42,8 +42,8 @@ class App extends React.Component {
               <MainPage />
             </Route>
           </Switch>
-        </HashRouter>
       </Container>
+      </HashRouter>
       </div>
     );
   }
