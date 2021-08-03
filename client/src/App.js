@@ -20,7 +20,6 @@ class App extends React.Component {
   }
   render(){
     return (<div>
-    <HashRouter basename={process.env.PUBLIC_URL} history={history}>
       <NavBar />
       <Container maxWidth="xl">
       <Toolbar />
@@ -43,7 +42,6 @@ class App extends React.Component {
             </Route>
           </Switch>
       </Container>
-      </HashRouter>
       </div>
     );
   }

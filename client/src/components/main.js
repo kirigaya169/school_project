@@ -23,7 +23,6 @@ const Row = (props) => {
         hour: 'numeric', minute: 'numeric', second: 'numeric',
         hour12: false
       };
-    console.log(lesson);
     return (
         <React.Fragment>
             <TableRow className={classes.root}>
