@@ -23,6 +23,7 @@ class App extends React.Component {
       <NavBar />
       <Container maxWidth="xl">
       <Toolbar />
+      <Link to="registration">aboba</Link>
         <Switch>
             
             <Route path='/registration'>

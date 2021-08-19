@@ -10,7 +10,7 @@ import { HashRouter } from 'react-router-dom'
 
 ReactDOM.render(
   <React.StrictMode>
-  <HashRouter history={history}>
+  <HashRouter basename='/'>
   <MuiPickersUtilsProvider utils={DateFnsUtils}>
     <UserContext.Provider value={new UserStore()}>
         <App />
