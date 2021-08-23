@@ -55,8 +55,8 @@ export default function NavBar() {
           {context.isAuth && <IconButton className={classes.title} component={BrowserLink} to="/request" aria-label="подать заявку" style={{color: 'white'}}>
                 <AddIcon/>
             </IconButton>}
-          {!context.isAuth ? (<React.Fragment><Button component={BrowserLink} to="/registration" color="inherit" component={BrowserLink} to="/login">Log in</Button>
-          <Button color="inherit">Sign in</Button></React.Fragment>) : <React.Fragment>
+          {!context.isAuth ? (<React.Fragment><Button component={BrowserLink} to="/login" color="inherit">Log in</Button>
+          <Button color="inherit" component={BrowserLink} to="/registration">Sign in</Button></React.Fragment>) : <React.Fragment>
             <IconButton
               color="inherit"
               onClick={handleProfileMenu}>
