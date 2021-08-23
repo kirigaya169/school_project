@@ -104,7 +104,7 @@ const RegistrationForm = observer(
             formData.append('_class', this.state._class);
             formData.append('avatar', this.state.photo);
             //console.log("process", process.env.REACT_APP_SERVER_HOST);
-            axios.post(serverHost + "api/user/registration", formData
+            axios.post(serverHost + "api/user/registration", formData   
             ).then((response) => {
                 this.successSend(response);
                 
