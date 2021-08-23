@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.js": "/school_project/static/js/main.329aadeb.chunk.js",
-    "main.js.map": "/school_project/static/js/main.329aadeb.chunk.js.map",
+    "main.js": "/school_project/static/js/main.b6408c32.chunk.js",
+    "main.js.map": "/school_project/static/js/main.b6408c32.chunk.js.map",
     "runtime-main.js": "/school_project/static/js/runtime-main.f92ca944.js",
     "runtime-main.js.map": "/school_project/static/js/runtime-main.f92ca944.js.map",
-    "static/js/2.47ae46f5.chunk.js": "/school_project/static/js/2.47ae46f5.chunk.js",
-    "static/js/2.47ae46f5.chunk.js.map": "/school_project/static/js/2.47ae46f5.chunk.js.map",
+    "static/js/2.8d03bc6a.chunk.js": "/school_project/static/js/2.8d03bc6a.chunk.js",
+    "static/js/2.8d03bc6a.chunk.js.map": "/school_project/static/js/2.8d03bc6a.chunk.js.map",
     "index.html": "/school_project/index.html",
-    "static/js/2.47ae46f5.chunk.js.LICENSE.txt": "/school_project/static/js/2.47ae46f5.chunk.js.LICENSE.txt"
+    "static/js/2.8d03bc6a.chunk.js.LICENSE.txt": "/school_project/static/js/2.8d03bc6a.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.f92ca944.js",
-    "static/js/2.47ae46f5.chunk.js",
-    "static/js/main.329aadeb.chunk.js"
+    "static/js/2.8d03bc6a.chunk.js",
+    "static/js/main.b6408c32.chunk.js"
   ]
 }
