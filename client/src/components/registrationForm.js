@@ -77,7 +77,6 @@ const RegistrationForm = observer(
             this.context.setIsAuth(true);
             //console.log("success", this.context);
             this.setState({succees_text: "Запись успешно создана"});
-            history.push('/');
         }
 
         handleClass(event){

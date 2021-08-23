@@ -9,6 +9,7 @@ import Link from '@material-ui/core/Link'
 import AddIcon from '@material-ui/icons/Add';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import history from '../history.js'
+import { Link as BrowserLink } from 'react-router-dom';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { Menu, MenuItem } from '@material-ui/core';
 import { UserContext } from '../context.js';
@@ -43,29 +44,19 @@ export default function NavBar() {
       <AppBar position="fixed" className={classes.root}>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-                <Link color='inherit' onClick={() => {
-                    history.push('/');
-                }}>Главная</Link>
+                <Link component={BrowserLink} to="/" color='inherit'>Главная</Link>
           </Typography>
           <div>
 
-            {(context.isAuth && context.user.roles.includes("ADMIN")) && <IconButton className={classes.title} aria-label="админ-панель" style={{color: 'white'}} onClick={() => {
-              history.push('/admin');
-            }}>
+            {(context.isAuth && context.user.roles.includes("ADMIN")) && <IconButton component={BrowserLink} to="/admin" className={classes.title} aria-label="админ-панель" style={{color: 'white'}}>
                 <SettingsIcon />
             </IconButton>}
 
-          {context.isAuth && <IconButton className={classes.title} aria-label="подать заявку" style={{color: 'white'}} onClick={() => {
-                history.push('/request');
-            }}>
-                <AddIcon />
+          {context.isAuth && <IconButton className={classes.title} component={BrowserLink} to="/request" aria-label="подать заявку" style={{color: 'white'}}>
+                <AddIcon/>
             </IconButton>}
-          {!context.isAuth ? (<React.Fragment><Button color="inherit" onClick={() => {
-              history.push('login');
-          }}>Log in</Button>
-          <Button color="inherit" onClick={() => {
-              history.push('registration');
-          }}>Sign in</Button></React.Fragment>) : <React.Fragment>
+          {!context.isAuth ? (<React.Fragment><Button component={BrowserLink} to="/registration" color="inherit" component={BrowserLink} to="/login">Log in</Button>
+          <Button color="inherit">Sign in</Button></React.Fragment>) : <React.Fragment>
             <IconButton
               color="inherit"
               onClick={handleProfileMenu}>

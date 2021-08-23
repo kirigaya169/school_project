@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
     },
   },
+  subjectInput: {
+    minWidth: 200,
+  },
 }));
 
 var RequestForm = observer(function(props){
@@ -83,8 +86,8 @@ var RequestForm = observer(function(props){
           }}></TextField>
           </div>
           <div>
-          <FormControl>
-          <InputLabel id="subject">Предмет</InputLabel>
+          <FormControl className={classes.subjectInput}>
+          <InputLabel  id="subject">Предмет</InputLabel>
             <Select
             labelId="subject"
             value={subject}

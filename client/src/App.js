@@ -11,6 +11,7 @@ import  LoginForm from './components/loginForm.js';
 import history from './history.js';
 import NavBar from './components/navBar.js';
 import UserStore from './store/userStore.js';
+import {Button} from '@material-ui/core'
 
 export const App = observer( 
 class App extends React.Component {
@@ -23,20 +24,19 @@ class App extends React.Component {
       <NavBar />
       <Container maxWidth="xl">
       <Toolbar />
-      <Link to="registration">aboba</Link>
         <Switch>
             
             <Route path='/registration'>
-              {!this.context.isAuth && <RegistrationForm />}
+              {!this.context.isAuth ? <RegistrationForm /> : <Redirect to="/" />}
             </Route>
             <Route path='/login'>
-            {!this.context.isAuth && <LoginForm />}
+            {!this.context.isAuth ? <LoginForm /> : <Redirect to="/" />}
             </Route>
             <Route path='/request'>
-            {this.context.isAuth && <RequestForm />} 
+            {this.context.isAuth ? <RequestForm /> : <Redirect to="/" />} 
             </Route>
             <Route path='/admin'>
-              {(this.context.isAuth && this.context.user.roles.includes("ADMIN")) && <AdminPanel />}
+              {(this.context.isAuth && this.context.user.roles.includes("ADMIN")) ? <AdminPanel /> : <Redirect to="/" />}
             </Route>
             <Route path='/'>
               <MainPage />

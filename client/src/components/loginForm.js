@@ -39,7 +39,6 @@ const LoginForm = observer(
             this.context.setUser(response.data.token);
             this.context.setIsAuth(true);
             this.setState({succees_text: "Запись успешно создана"});
-            history.push('/');
         }
 
         async handleSubmit(event){
