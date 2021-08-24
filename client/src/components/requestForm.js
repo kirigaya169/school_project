@@ -7,6 +7,7 @@ import {DateTimePicker} from '@material-ui/pickers';
 import {UserContext} from '../context.js';
 import MuiAlert from '@material-ui/lab/Alert';
 import subjectStore from '../store/subjectStore.js';
+import serverHost from '../config.js';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -19,13 +20,15 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
     },
   },
+  subjectInput: {
+    minWidth: 200,
+  },
 }));
 
 var RequestForm = observer(function(props){
     const classes = useStyles();
     var dt = new Date();
     var context = useContext(UserContext);
-    console.log(context);
     const [theme, setTheme] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [subject, setSubject] = React.useState('');
@@ -40,13 +43,12 @@ var RequestForm = observer(function(props){
         formData.append('subject', subject);
         formData.append('date', date);
         try{
-          var data = await axios.post(process.env.REACT_APP_SERVER_HOST + 'api/requests/', formData, {
+          var data = await axios.post(serverHost + 'api/requests/', formData, {
             headers: {
               'Authorization': 'Baerar ' + context.token, 
             }
           });
           setMessage(data.data.data);
-          console.log(data.data.data);
         }
         catch(e){
           if (e.response.status == "403"){
@@ -65,7 +67,6 @@ var RequestForm = observer(function(props){
       setMessage('');
     };
 
-    console.log(date);
     return (
         <form className={classes.root} noValidate>
         <Snackbar open={message} autoHideDuration={6000} onClose={handleClose}>
@@ -85,8 +86,8 @@ var RequestForm = observer(function(props){
           }}></TextField>
           </div>
           <div>
-          <FormControl>
-          <InputLabel id="subject">Предмет</InputLabel>
+          <FormControl className={classes.subjectInput}>
+          <InputLabel  id="subject">Предмет</InputLabel>
             <Select
             labelId="subject"
             value={subject}

@@ -5,6 +5,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import axios from 'axios';
 import {UserContext} from '../../context.js'
 import { observer } from 'mobx-react'
+import serverHost from '../../config.js';
 
 const useStyles = makeStyles({
     root: {
@@ -23,15 +24,13 @@ export default observer(function UserCard(props){
     const [isAdmin, setIsAdmin] = React.useState(user.roles.includes("ADMIN"));
     const changeAdminRole = async() => {
         try{
-            console.log("token", context.token);
-            const data = await axios.post(process.env.REACT_APP_SERVER_HOST + 'api/user/change_role', {email: user.email},
+            const data = await axios.post(serverHost + 'api/user/change_role', {email: user.email},
             {
                 headers: {
                     'Authorization': 'Baerar ' + context.token,
                 }
             });
             setIsAdmin(data.data.data);
-            console.log(isAdmin);
         }
         catch(e) {
             console.log(e.response);

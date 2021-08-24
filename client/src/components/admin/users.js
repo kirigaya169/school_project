@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import {Typography, Box, CircularProgress} from '@material-ui/core'
 import {UserContext} from '../../context.js'
 import UserCard from './userCard.js';
+import serverHost from '../../config.js';
 
 export default observer(function(props) {
     const context = React.useContext(UserContext);
@@ -13,13 +14,11 @@ export default observer(function(props) {
         if (!mounted){
             return;
         }
-        console.log(context.token);
         try{
-            var data = await axios.get(process.env.REACT_APP_SERVER_HOST + 'api/user/', {
+            var data = await axios.get(serverHost + 'api/user/', {
                 headers: {
                     'Authorization' : 'Baerar ' + context.token},
             })
-            console.log(data.data.users);
             setUsers(data.data.users);
         }
         catch(e){
@@ -31,11 +30,9 @@ export default observer(function(props) {
     }
     React.useEffect(() => {
         setIsLoading(true);
-        console.log("start");
         let mounted = true;
         getUsers(mounted);
         setIsLoading(false);
-        console.log("stop");
         return () => mounted = false;
     }, [])
 
