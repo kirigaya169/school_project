@@ -1,5 +1,5 @@
 import React from 'react'
-import {TextField, Button, Snackbar, MenuItem, FormControl, Select, InputLabel, Input, Chip} from '@material-ui/core'
+import {TextField, Button, Snackbar, MenuItem, FormControl, Select, InputLabel, Input, Chip, Box, Typography} from '@material-ui/core'
 import MuiAlert from '@material-ui/lab/Alert'
 import axios from 'axios'
 import {observer} from 'mobx-react'
@@ -49,11 +49,11 @@ const RegistrationForm = observer(
                 this.sendSubjects(response);
             });
             this.style = {
-                margin: '10px',
+                marginBottom: '10px',
             }
             this.formStyle = {
                 margin:'10px',
-                minWidth: 120,
+                minWidth: 70,
             }
             this.errorMessage = '';
             this.successMessage = '';
@@ -151,7 +151,7 @@ const RegistrationForm = observer(
             //console.log(process.env.REACT_APP_SERVER_HOST);
             //console.log("render", this.context);
             var classes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-            return (<form  onSubmit={this.handleSubmit} >
+            return (<form onSubmit={this.handleSubmit} >
                 <Snackbar open={this.state.error_text !== ''} autoHideDuration={6000} onClose={(event, reason) => {
                     if (reason === 'clickaway') {   
                 return;
@@ -164,61 +164,74 @@ const RegistrationForm = observer(
                     {this.state.error_text}
                     </Alert>
                 </Snackbar>
-                <div>
-                    <TextField style={this.style} name="name" id="name" label="Имя" value={this.state.name} onChange={this.handleInput} />
-                </div>
-                <div>
-                    <TextField style={this.style} name="email" id="email" label="Email" value={this.state.email} onChange={this.handleInput} />
-                </div>
-                <div>
-                <TextField style={this.style} name="password" id="password" label="Password" type="password" value={this.state.password} onChange={this.handleInput} />
-                </div>
-                <div>
-                    <FormControl style={this.formStyle} id="class" >
-                    <InputLabel>Класс</InputLabel>
-                    <Select style={this.style} value={this.state._class} onChange={this.handleClass}>
-                        {classes.map((_class) => (
-                            <MenuItem key={_class} value={_class}>{_class}</MenuItem>
-                        ))}
+                <Box textAlign="center" mt={2}  >
+                    <Typography variant="h2" gutterBottom>
+                        Sign in
+                    </Typography>
+                </Box>
+                <Box textAlign="center" borderColor="grey.400" border={1} width="500px" px={2} pb={2} borderRadius={16} mx="auto">
+                    
+                    <div>
+                        <TextField variant="outlined" margin="normal" style={{marginRight: 5, width: "49.5%"}} name="name" id="name" label="Имя" value={this.state.name} onChange={this.handleInput} />
+                        <TextField variant="outlined" margin="normal" style={{width: "49.5%"}} name="email" id="email" label="Email" value={this.state.email} onChange={this.handleInput} />
+                    </div>
+                    <div>
+                    <TextField variant="outlined" fullWidth margin="normal" style={this.style} name="password" id="password" label="Password" type="password" value={this.state.password} onChange={this.handleInput} />
+                    </div>
+                    <Box textAlign="start">
+                    <div>
+                        <FormControl variant="outlined" style={this.formStyle} id="class" >
+                        <InputLabel id="class_label">Класс</InputLabel>
+                        <Select labelId="class_label" label="Класс" style={this.style} value={this.state._class} onChange={this.handleClass}>
+                            {classes.map((_class) => (
+                                <MenuItem key={_class} value={_class}>{_class}</MenuItem>
+                            ))}
+                        </Select>
+                        </FormControl>
+                    </div>
+                    <Box display="flex" mb={2}>
+                    <FormControl variant="outlined" style={{width: 150}} id="role" >
+                    <InputLabel>Роль</InputLabel>
+                    
+                    <Select label="Роль" style={this.style} value={this.state.roles} onChange={this.handleMenu.bind(this)}>
+                        <MenuItem value="USER">Ученик</MenuItem>
+                        <MenuItem value="TEACHER">Учитель</MenuItem>
                     </Select>
                     </FormControl>
-                </div>
-                <FormControl style={this.formStyle} id="role" >
-                <InputLabel>Роль</InputLabel>
-                <Select style={this.style} value={this.state.roles} onChange={this.handleMenu.bind(this)}>
-                    <MenuItem value="USER">Ученик</MenuItem>
-                    <MenuItem value="TEACHER">Учитель</MenuItem>
-                </Select>
-                </FormControl>
-                { (this.state.roles == "TEACHER") && 
-                <FormControl id="subject" style={this.formStyle}>
-                <InputLabel>Предметы</InputLabel>
-                    <Select
-                    multiple
-                    onChange={this.handleSubject}
-                    value={this.state.subjects}
-                    input={<Input/>}
-                    renderValue= {(selected) => (
-                        <div >
-                        {selected.map((value) => (
-                            <Chip key={value} label={value} />
-                        ))}
-                        </div>
-                    )} >
-                        {subjectStore.subjects.map((subject) => (
-                            <MenuItem key={subject} value={subject}>
-                                {subject}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                }
-                <div>
-                    <Button variant="contained" color="primary" type="submit">
-                        Зарегестрироваться
-                    </Button>
-                </div>
-
+                    { (this.state.roles == "TEACHER") && 
+                    <FormControl variant="outlined" id="subject" style={{marginLeft: 10, width: "100%"}}>
+                    <InputLabel>Предметы</InputLabel>
+                        <Select
+                        label="Предмет"
+                        autoWidth
+                        
+                        multiple
+                        onChange={this.handleSubject}
+                        value={this.state.subjects}
+                        input={<Input/>}
+                        renderValue= {(selected) => (
+                            <div style={{display: "flex", flexWrap: "wrap"}}>
+                            {selected.map((value) => (
+                                <Chip key={value} label={value} />
+                            ))}
+                            </div>
+                        )} >
+                            {subjectStore.subjects.map((subject) => (
+                                <MenuItem key={subject} value={subject}>
+                                    {subject}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    }
+                    </Box>
+                    </Box>
+                    <div>
+                        <Button variant="contained" color="primary" type="submit">
+                            Зарегестрироваться
+                        </Button>
+                    </div>
+                </Box>
             </form>)
         }
 })

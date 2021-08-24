@@ -76,9 +76,11 @@ export default function MainPage(){
     //console.log(lessons);
     return(
         <div>
-            <Typography variant="h2">
-                Расписание занятий
-            </Typography>
+            <Box textAlign="center" my={2.5}>
+                <Typography  variant="h2">
+                    Расписание занятий
+                </Typography>
+            </Box>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
