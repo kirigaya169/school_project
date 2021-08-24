@@ -1,5 +1,7 @@
 import jwt_decode from 'jwt-decode';
 import {makeObservable, action, observable, extendObservable, autorun, toJS} from 'mobx'
+import axios from 'axios';
+import serverHost from '../config';
 
 function autoSave(store, save) {
     let firstRun = true;
@@ -46,6 +48,15 @@ export class UserStore{
     load() {
         if (sessionStorage.getItem('user-store')){
             const data = JSON.parse(sessionStorage.getItem('user-store'));
+            axios.get(serverHost + 'api/user/check', {
+                headers: {
+                    'Authorization': 'Baerar ' + data.token,
+                }
+            }).then(response => {
+                console.log(response);
+            }).catch(e => {
+                console.log(e);
+            })
             extendObservable(this, data);
         }
         else {

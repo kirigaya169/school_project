@@ -84,6 +84,12 @@ class UserController{
         })
     }
 
+    async check(req, res, next){
+        const {email} = req.user.email;
+        const user = User.findOne({email});
+        return res.json({"token": generateJWT(user)});
+    }
+
     async ChangeAdminRole(req, res, next){
         const {email} = req.body;
         if (!email){

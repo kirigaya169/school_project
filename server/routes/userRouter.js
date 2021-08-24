@@ -23,4 +23,6 @@ router.post('/change_role', roleMiddleware(["ADMIN"]), controller.ChangeAdminRol
 
 router.get('/subject', controller.getUsersBySubject);
 
+router.get('/check', authMiddleware, controller.check);
+
 module.exports = router;
