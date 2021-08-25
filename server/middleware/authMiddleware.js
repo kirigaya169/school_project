@@ -13,6 +13,7 @@ module.exports = function(req, res, next){
         var key = process.env.TOKEN_KEY || "1a2b-3c4d-5e6f-7g8h";
         const decodedData = jwt.verify(token, key);
         req.user = decodedData;
+        //console.log("success");
         next();
     }catch(e){
         console.log(chalk.red(e));

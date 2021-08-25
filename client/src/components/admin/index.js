@@ -5,7 +5,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import UserView from './users.js'
 import RequestsView from './requests.js';
-import {UserContext} from '../../context.js';
+import userStore from '../../store/userStore.js';
 
 const drawerWidth = 240;
 

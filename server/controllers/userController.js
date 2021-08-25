@@ -17,6 +17,7 @@ function generateJWT(user){
         roles: user.roles,
         class: user.class,
     }
+    console.log(payload);
     return jwt.sign(payload, 
         key, {
             expiresIn: '24h'
@@ -60,7 +61,7 @@ class UserController{
 
     async login(req, res, next){
         const {email, password} = req.body;
-        console.log(req.body);
+        //console.log(req.body);
         const user = await User.findOne({email: email});
         if (!user){
             return next(ApiError.badRequest("Пользователя с таким email не существует!"));
@@ -84,9 +85,16 @@ class UserController{
         })
     }
 
-    async check(req, res, next){
+    async check(req, res){
         const {email} = req.user.email;
-        const user = User.findOne({email});
+        console.log(req.user);
+         await User.find({}, (err, result) => {
+            result.forEach(user => {
+                console.log(user.email === req.user.email);
+            })
+        });
+        const user = await User.findOne({email: req.user.email});
+        console.log(user);
         return res.json({"token": generateJWT(user)});
     }
 

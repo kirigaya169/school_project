@@ -4,10 +4,10 @@ import {observer} from 'mobx-react';
 import {TextField, FormControl, Select, InputLabel, MenuItem, Button, Snackbar} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import {DateTimePicker} from '@material-ui/pickers';
-import {UserContext} from '../context.js';
 import MuiAlert from '@material-ui/lab/Alert';
 import subjectStore from '../store/subjectStore.js';
 import serverHost from '../config.js';
+import userStore from '../store/userStore.js';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
 var RequestForm = observer(function(props){
     const classes = useStyles();
     var dt = new Date();
-    var context = useContext(UserContext);
     const [theme, setTheme] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [subject, setSubject] = React.useState('');
@@ -45,14 +44,14 @@ var RequestForm = observer(function(props){
         try{
           var data = await axios.post(serverHost + 'api/requests/', formData, {
             headers: {
-              'Authorization': 'Baerar ' + context.token, 
+              'Authorization': 'Baerar ' + userStore.token, 
             }
           });
           setMessage(data.data.data);
         }
         catch(e){
           if (e.response.status == "403"){
-            context.setIsAuth(false);
+            userStore.setIsAuth(false);
           }
           console.log(e);
         }

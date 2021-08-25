@@ -3,7 +3,7 @@ import {Card, Typography, CardContent, CardActions, Box, Chip, Button} from '@ma
 import { makeStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import axios from 'axios';
-import {UserContext} from '../../context.js'
+import userStore from '../../store/userStore.js';
 import { observer } from 'mobx-react'
 import serverHost from '../../config.js';
 
@@ -19,7 +19,6 @@ const useStyles = makeStyles({
 
 export default observer(function UserCard(props){
     const classes = useStyles();
-    const context = React.useContext(UserContext);
     const user = props.user;
     const [isAdmin, setIsAdmin] = React.useState(user.roles.includes("ADMIN"));
     const changeAdminRole = async() => {
@@ -27,7 +26,7 @@ export default observer(function UserCard(props){
             const data = await axios.post(serverHost + 'api/user/change_role', {email: user.email},
             {
                 headers: {
-                    'Authorization': 'Baerar ' + context.token,
+                    'Authorization': 'Baerar ' + userStore.token,
                 }
             });
             setIsAdmin(data.data.data);
@@ -35,7 +34,7 @@ export default observer(function UserCard(props){
         catch(e) {
             console.log(e.response);
             if (e.response.status == "403"){
-                context.setIsAuth(false);
+                userStore.setIsAuth(false);
             }
         }
     }

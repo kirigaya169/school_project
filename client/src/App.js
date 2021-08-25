@@ -5,21 +5,30 @@ import MainPage from './components/main.js';
 import AdminPanel from './components/admin/index.js';
 import {HashRouter, Switch, Route, Link, Redirect} from "react-router-dom";
 import React from 'react';
-import {UserContext} from './context.js';
 import {observer, Provider} from 'mobx-react';  
 import  LoginForm from './components/loginForm.js';
 import history from './history.js';
 import NavBar from './components/navBar.js';
 import UserStore from './store/userStore.js';
-import {Button} from '@material-ui/core'
+import {Button} from '@material-ui/core';
+import userStore from './store/userStore.js';
+import axios from 'axios';
+import serverHost from './config.js';
+import userCard from './components/admin/userCard.js';
 
 export const App = observer( 
-class App extends React.Component {
-  static contextType = UserContext;
-  constructor(){
-    super();
-  }
-  render(){
+() => {
+    React.useEffect(async() => {
+      console.log(userStore);
+      axios.get(serverHost + 'api/user/check', {headers: {
+        "Authorization" : "Baerar " + userStore.token,
+      }}).then(data => {
+        userStore.setUser(data.data.token);
+      }).catch(e => {
+        console.log(e.response) ;
+      });
+    }, [])
+    console.log("a", userStore);
     return (<div>
       <NavBar />
       <Container maxWidth="xl">
@@ -27,16 +36,16 @@ class App extends React.Component {
         <Switch>
             
             <Route path='/registration'>
-              {!this.context.isAuth ? <RegistrationForm /> : <Redirect to="/" />}
+              {!userStore.isAuth ? <RegistrationForm /> : <Redirect to="/" />}
             </Route>
             <Route path='/login'>
-            {!this.context.isAuth ? <LoginForm /> : <Redirect to="/" />}
+            {!userStore.isAuth ? <LoginForm /> : <Redirect to="/" />}
             </Route>
             <Route path='/request'>
-            {this.context.isAuth ? <RequestForm /> : <Redirect to="/" />} 
+            {userStore.isAuth ? <RequestForm /> : <Redirect to="/" />} 
             </Route>
             <Route path='/admin'>
-              {(this.context.isAuth && this.context.user.roles.includes("ADMIN")) ? <AdminPanel /> : <Redirect to="/" />}
+              {(userStore.isAuth && userStore.user.roles.includes("ADMIN")) ? <AdminPanel /> : <Redirect to="/" />}
             </Route>
             <Route path='/'>
               <MainPage />
@@ -45,8 +54,6 @@ class App extends React.Component {
       </Container>
       </div>
     );
-  }
-  
-})
+  })
 
 export default App;

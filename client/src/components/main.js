@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import {Typography, TableRow, TableCell, IconButton, Table, TableContainer, TableHead, TableBody, Paper, Collapse, Box} from '@material-ui/core';
+import {Typography, TableRow, TableCell, IconButton, Table, TableContainer, TableHead, TableBody, Paper, Collapse, Box, CircularProgress} from '@material-ui/core';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { makeStyles } from '@material-ui/core/styles';
@@ -58,20 +58,19 @@ const Row = (props) => {
 export default function MainPage(){
 
     const [lessons, setLessons] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(false);
 
     React.useEffect(async() => {
-        try{
-            const data = await axios.get(serverHost + 'api/lessons/');
-            //console.log(data.data.lessons);
+        await axios.get(serverHost + 'api/lessons/').then(data => {
             var lessons_data = data.data.lessons;
             lessons_data.sort(function(a, b){
                 return new Date(b.date) - new Date(a.date);
             });
             setLessons(lessons_data);
-        }
-        catch(e){
+            setIsLoading(true);
+        }).catch(e => {
             console.log(e);
-        }
+        });
     }, []);
     //console.log(lessons);
     return(
@@ -81,7 +80,8 @@ export default function MainPage(){
                     Расписание занятий
                 </Typography>
             </Box>
-            <TableContainer component={Paper}>
+
+            {isLoading ? <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -107,7 +107,7 @@ export default function MainPage(){
                         <Row lesson={lesson} key={lesson.title}/>
                     ))}
                 </Table>
-            </TableContainer>
+            </TableContainer> : <Box display="flex" height="80vh" justifyContent="center" alignItems="center"><CircularProgress /></Box>}
         </div>
     )
 }

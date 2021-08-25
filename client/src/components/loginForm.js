@@ -3,10 +3,10 @@ import {TextField, Button, Snackbar, Typography, Box } from '@material-ui/core'
 import MuiAlert from '@material-ui/lab/Alert'
 import axios from 'axios'
 import {observer} from 'mobx-react'
-import {UserContext} from '../context.js';
 import history from '../history.js';
 import serverHost from '../config.js';
 import { withStyles} from '@material-ui/core/styles';
+import userStore from '../store/userStore.js'
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -28,9 +28,9 @@ const styles = theme => ({
 const LoginForm = observer(
     class LoginForm extends React.Component{
 
-        constructor(props, context){
+        constructor(props){
             console.log(props);
-            super(props, context);
+            super(props);
             
             
             this.state = {
@@ -48,8 +48,8 @@ const LoginForm = observer(
         }
 
         successSend(response){
-            this.context.setUser(response.data.token);
-            this.context.setIsAuth(true);
+            userStore.setUser(response.data.token);
+            userStore.setIsAuth(true);
             this.setState({succees_text: "Запись успешно создана"});
         }
 
@@ -57,8 +57,8 @@ const LoginForm = observer(
             event.preventDefault();
             try{
                 var data = await axios.post(serverHost + "api/user/login", this.state)
-                this.context.setUser(data.data.token);
-                this.context.setIsAuth(true);
+                userStore.setUser(data.data.token);
+                userStore.setIsAuth(true);
                 this.setState({succees_text: "Запись успешно создана"});
             }
             catch(e){
@@ -111,7 +111,5 @@ const LoginForm = observer(
             </form>)
         }
 })
-
-LoginForm.contextType = UserContext;
 
 export default withStyles(styles)(LoginForm);

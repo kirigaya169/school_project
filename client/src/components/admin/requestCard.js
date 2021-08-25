@@ -5,7 +5,7 @@ import { Card,
 import { makeStyles } from '@material-ui/core/styles';
 import { observer } from 'mobx-react';
 import axios from 'axios';
-import { UserContext } from '../../context';
+import userStore from '../../store/userStore';
 import serverHost from '../../config';
 
 const useStyles = makeStyles({
@@ -22,7 +22,6 @@ const useStyles = makeStyles({
 
 const RequestDialog = function(props){
     const classes = useStyles();
-    const context = React.useContext(UserContext);
     const {onClose, open, request, setOpen, setIsDeleted} = props;
     const [accept, setAccept] = React.useState(true);
     const [teacher, setTeacher] = React.useState('');
@@ -36,7 +35,7 @@ const RequestDialog = function(props){
         catch(e){
             console.log(e);
             if (e.response.status == '403'){
-                context.setIsAuth(false);
+                userStore.setIsAuth(false);
             }
         }
     }, []);
@@ -53,7 +52,7 @@ const RequestDialog = function(props){
                     id: request._id,
                 },
                 headers: {
-                    'Authorization': 'Baerar ' + context.token,
+                    'Authorization': 'Baerar ' + userStore.token,
                 }
             });
             setOpen(false);
@@ -62,7 +61,7 @@ const RequestDialog = function(props){
         catch(e){
             console.log(e);
             if (e.response.status == '403'){
-                context.setIsAuth(false);
+                userStore.setIsAuth(false);
             }
         }
     }
@@ -82,7 +81,7 @@ const RequestDialog = function(props){
                     id: request._id,
                 },
                 headers: {
-                    'Authorization': 'Baerar ' + context.token,
+                    'Authorization': 'Baerar ' + userStore.token,
                 }
             })
             setOpen(false);
@@ -91,7 +90,7 @@ const RequestDialog = function(props){
         catch(e){
             console.log(e);
             if (e.response.status == '403'){
-                context.setIsAuth(false);
+                userStore.setIsAuth(false);
             }
         }
     }

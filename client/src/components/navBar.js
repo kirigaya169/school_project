@@ -12,7 +12,7 @@ import history from '../history.js'
 import { Link as BrowserLink } from 'react-router-dom';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { Menu, MenuItem } from '@material-ui/core';
-import { UserContext } from '../context.js';
+import userStore from '../store/userStore.js';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function NavBar() {
   const classes = useStyles();
-  const context = React.useContext(UserContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleCloseMenu = () => {
@@ -48,14 +47,14 @@ export default function NavBar() {
           </Typography>
           <div>
 
-            {(context.isAuth && context.user.roles.includes("ADMIN")) && <IconButton component={BrowserLink} to="/admin" className={classes.title} aria-label="админ-панель" style={{color: 'white'}}>
+            {(userStore.isAuth && userStore.user.roles.includes("ADMIN")) && <IconButton component={BrowserLink} to="/admin" className={classes.title} aria-label="админ-панель" style={{color: 'white'}}>
                 <SettingsIcon />
             </IconButton>}
 
-          {context.isAuth && <IconButton className={classes.title} component={BrowserLink} to="/request" aria-label="подать заявку" style={{color: 'white'}}>
+          {userStore.isAuth && <IconButton className={classes.title} component={BrowserLink} to="/request" aria-label="подать заявку" style={{color: 'white'}}>
                 <AddIcon/>
             </IconButton>}
-          {!context.isAuth ? (<React.Fragment><Button component={BrowserLink} to="/login" color="inherit">Log in</Button>
+          {!userStore.isAuth ? (<React.Fragment><Button component={BrowserLink} to="/login" color="inherit">Log in</Button>
           <Button color="inherit" component={BrowserLink} to="/registration">Sign in</Button></React.Fragment>) : <React.Fragment>
             <IconButton
               color="inherit"
@@ -74,7 +73,7 @@ export default function NavBar() {
         onClose={handleCloseMenu}
         >
           <MenuItem onClick={() => {
-            context.setIsAuth(false);
+            userStore.setIsAuth(false);
             setAnchorEl(false);
           }}>
             Выйти

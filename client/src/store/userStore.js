@@ -48,15 +48,7 @@ export class UserStore{
     load() {
         if (sessionStorage.getItem('user-store')){
             const data = JSON.parse(sessionStorage.getItem('user-store'));
-            axios.get(serverHost + 'api/user/check', {
-                headers: {
-                    'Authorization': 'Baerar ' + data.token,
-                }
-            }).then(response => {
-                console.log(response);
-            }).catch(e => {
-                console.log(e);
-            })
+            console.log(data);
             extendObservable(this, data);
         }
         else {
@@ -75,4 +67,4 @@ export class UserStore{
 
 
 
-export default UserStore;
+export default new UserStore();
