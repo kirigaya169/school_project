@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import axios from 'axios';
 import {observer} from 'mobx-react';
-import {TextField, FormControl, Select, InputLabel, MenuItem, Button, Snackbar} from '@material-ui/core';
+import {TextField, FormControl, Select, InputLabel, MenuItem, Button, Snackbar, Box, Typography, Grid} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import {DateTimePicker} from '@material-ui/pickers';
 import MuiAlert from '@material-ui/lab/Alert';
@@ -20,9 +20,12 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
     },
   },
-  subjectInput: {
-    minWidth: 200,
+  field: {
+    marginTop: theme.spacing(1),
   },
+  button: {
+    marginTop: theme.spacing(1),
+  }
 }));
 
 var RequestForm = observer(function(props){
@@ -73,20 +76,26 @@ var RequestForm = observer(function(props){
           {message}
         </Alert>
         </Snackbar>
+        <Box textAlign="center">
+        <Typography variant="h2">
+          Подать заявку
+        </Typography>
+        <Box mt={3} border={1} borderColor="grey.300" width="30%" mx="auto" borderRadius={20} p={3}>
         <div>
-          <TextField label="Тема" value={theme} onChange={(e) => {
+          <TextField fullWidth label="Тема" value={theme} onChange={(e) => {
             //console.log(e);
             setTheme(e.target.value);
           }}></TextField>
           </div>
           <div>
-          <TextField multiline   label="Описание" value={description} onChange={(e) => {
+          <TextField fullWidth multiline   label="Описание" value={description} onChange={(e) => {
             setDescription(e.target.value);
           }}></TextField>
           </div>
-          <div>
-          <FormControl className={classes.subjectInput}>
-          <InputLabel  id="subject">Предмет</InputLabel>
+          <Grid container spacing={3}>
+          <Grid className={classes.field} item xs={6}>
+          <FormControl fullWidth>
+          <InputLabel id="subject">Предмет</InputLabel>
             <Select
             labelId="subject"
             value={subject}
@@ -99,22 +108,29 @@ var RequestForm = observer(function(props){
             ))}
             </Select>
           </FormControl>
-          </div>
-          <div>
+          
+          </Grid>
+          <Grid  item xs={6}>
           <DateTimePicker
+          style={{marginTop: 24}}
+          fullWidth
+          margin="auto"
           clearable
           value={date}
           onChange={setDate}>
-
           </DateTimePicker>
-          </div>
+          </Grid>
+          </Grid>
             <Button
+              className={classes.button}
               color="primary"
               variant="contained"
               onClick={sendData}
               >
               Отправить
             </Button>
+            </Box>
+          </Box>
         </form>
       );
 });
