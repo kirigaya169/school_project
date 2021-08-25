@@ -22,6 +22,7 @@ const styles = theme => ({
     },
     button: {
         width: "200px",
+        backgroundColor: theme.backgroundColor,
     }
 })
 

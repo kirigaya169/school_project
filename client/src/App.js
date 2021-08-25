@@ -15,6 +15,7 @@ import userStore from './store/userStore.js';
 import axios from 'axios';
 import serverHost from './config.js';
 import userCard from './components/admin/userCard.js';
+import {io} from 'socket.io-client'
 
 export const App = observer( 
 () => {
@@ -27,6 +28,8 @@ export const App = observer(
       }).catch(e => {
         console.log(e.response) ;
       });
+      const socket = io();
+      socket.emit("connection", "hello");
     }, [])
     console.log("a", userStore);
     return (<div>

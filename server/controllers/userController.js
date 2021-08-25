@@ -4,6 +4,7 @@ const User = require('../models/user.js');
 const Role = require('../models/role.js');
 const jwt = require('jsonwebtoken');
 const {validationResult} = require('express-validator');
+const { io } = require("../socket.js");
 
 const ApiError = require('../error.js');
 const Subject = require('../models/subject.js');
@@ -85,7 +86,7 @@ class UserController{
         })
     }
 
-    async check(req, res){
+    async check(req, res, next){
         const {email} = req.user.email;
         console.log(req.user);
          await User.find({}, (err, result) => {
@@ -93,8 +94,12 @@ class UserController{
                 console.log(user.email === req.user.email);
             })
         });
+
         const user = await User.findOne({email: req.user.email});
-        console.log(user);
+        if (!user) {
+            return next(ApiError.badRequest("Неправильные данные!"));
+        }
+        io.to(user._id).emit("notification", "aboba");
         return res.json({"token": generateJWT(user)});
     }
 

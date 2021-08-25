@@ -77,7 +77,7 @@ export default function MainPage(){
         <div>
             <Box textAlign="center" my={2.5}>
                 <Typography  variant="h2">
-                    Расписание занятий
+                    Хуй
                 </Typography>
             </Box>
 

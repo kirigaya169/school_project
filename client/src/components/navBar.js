@@ -40,7 +40,7 @@ export default function NavBar() {
   }
 
   return (
-      <AppBar position="fixed" className={classes.root}>
+      <AppBar style={{backgroundColor: "rgb(199, 142, 255)"}} position="fixed" className={classes.root}>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
                 <Link component={BrowserLink} to="/" color='inherit'>Главная</Link>

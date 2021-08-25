@@ -1,11 +1,11 @@
-
-const express = require('express')
+const express = require('express');
 const chalk = require('chalk');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 const mongoose = require('mongoose');
 const fileUpload = require('express-fileupload');
+const Server = require("socket.io").Server;
 
 const Role = require('./models/role.js');
 const Subject = require('./models/subject.js');
@@ -14,7 +14,10 @@ const errorMiddleware = require('./middleware/errorMiddleware.js');
 
 require('dotenv').config();
 
-var app = express();
+const {app, io} = require('./socket.js');
+io.on("connection", (client) => {
+    console.log(client);
+})
 
 //app.use(bodyParser.urlencoded({ extended: false }));
 
