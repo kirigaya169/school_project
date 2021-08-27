@@ -73,17 +73,19 @@ class RequestController{
           };
         const teacherNotification = new Notification({
             user: teacher._id,
-            text: `У вас состоится занятие по предмету ${lesson.subject} в ${lesson.date.toLocaleString(timeOptions)}`
+            text: `У вас состоится занятие по предмету ${lesson.subject} в ${lesson.date.toLocaleString(timeOptions)}`,
+            readed: false,
         })
         const userNotification = new Notification({
             user: requestAuthor._id,
             text: `Ваша заявка одобрена! Занятие пройдет ${lesson.date.toLocaleString(timeOptions)}.\n По всем вопросам пишите на третью безполезную почту Маши`,
+            readed: false,
         })
         teacherNotification.save();
         userNotification.save();
         console.log(io);
-        io.to(teacher.email).emit("notification", teacherNotification.text);
-        io.to(requestAuthor.email).emit("notification", userNotification.text);
+        io.to(teacher.email).emit("notification", teacherNotification);
+        io.to(requestAuthor.email).emit("notification", userNotification);
         await Request.findOneAndDelete({_id: id}, (err) =>{
             if (err){
                 console.log(err);
@@ -105,9 +107,10 @@ class RequestController{
         const notification = new Notification({
             user: user._id,
             text: `Ваша заявка по теме "${request.title}" была отклонена`,
+            readed: false,
         });
         notification.save();
-        io.to(user.email).emit("notification", notification.text);
+        io.to(user.email).emit("notification", notification);
         return res.json({data: "Запись успешно удалена"});
     }
 }

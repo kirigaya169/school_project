@@ -29,4 +29,6 @@ router.get('/check', authMiddleware, controller.check);
 
 router.get('/notifications', authMiddleware, controller.getNotifications);
 
+router.post('/read', authMiddleware, controller.readAll);
+
 module.exports = router;

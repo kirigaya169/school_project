@@ -9,6 +9,7 @@ const { io } = require("../socket.js");
 const Notification = require('../models/notification.js');
 const ApiError = require('../error.js');
 const Subject = require('../models/subject.js');
+const notification = require('../models/notification.js');
 
 function generateJWT(user){
     var key = process.env.TOKEN_KEY || "1a2b-3c4d-5e6f-7g8h";
@@ -103,6 +104,17 @@ class UserController{
         //sconsole.log("not", req.user);
         const notifications = await Notification.find({user: id});
         return res.json({"notifications" : notifications});
+    }
+
+    async readAll(req, res, next){
+        const id = req.user.id;
+        const notifications = await Notification.find({user: id, readed: false});
+        console.log(notifications);
+        notifications.forEach(notification => {
+            notification.readed = true;
+            notification.save();
+        });
+        return res.json({data: "successfull readed"});
     }
 
     async ChangeAdminRole(req, res, next){
