@@ -13,6 +13,7 @@ import { Link as BrowserLink } from 'react-router-dom';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { Menu, MenuItem } from '@material-ui/core';
 import userStore from '../store/userStore.js';
+import ThemeSwitch from './themeSwitch.js';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,13 +41,13 @@ export default function NavBar() {
   }
 
   return (
-      <AppBar style={{backgroundColor: "rgb(199, 142, 255)"}} position="fixed" className={classes.root}>
+      <AppBar position="fixed" className={classes.root}>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
                 <Link component={BrowserLink} to="/" color='inherit'>Главная</Link>
           </Typography>
           <div>
-
+            <ThemeSwitch />
             {(userStore.isAuth && userStore.user.roles.includes("ADMIN")) && <IconButton component={BrowserLink} to="/admin" className={classes.title} aria-label="админ-панель" style={{color: 'white'}}>
                 <SettingsIcon />
             </IconButton>}

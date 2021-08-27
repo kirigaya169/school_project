@@ -9,17 +9,20 @@ import { HashRouter } from 'react-router-dom';
 import {ThemeProvider, createMuiTheme} from '@material-ui/core/styles'
 
 const theme = createMuiTheme({
-  backgroundColor: "rgb(199, 142, 255)",
+  palette: {
+    primary: {
+      main: 'rgb(199, 142, 255)',
+      contrastText: '#fff',
+    }
+  }
 })
 
 ReactDOM.render(
   <React.StrictMode>
   <HashRouter basename='/'>
-  <ThemeProvider theme={theme}>
   <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <App />
     </MuiPickersUtilsProvider>
-    </ThemeProvider>
     </HashRouter>
   </React.StrictMode>,
   document.getElementById('root')

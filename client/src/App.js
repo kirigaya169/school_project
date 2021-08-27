@@ -15,6 +15,8 @@ import userStore from './store/userStore.js';
 import axios from 'axios';
 import serverHost from './config.js';
 import userCard from './components/admin/userCard.js';
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import themeStore from './store/themeStore.js';
 import io from 'socket.io-client'
 
 export const App = observer( 
@@ -48,7 +50,9 @@ export const App = observer(
       //  socket.emit("connection", "hello");
     }, [])
     console.log("a", userStore);
-    return (<div>
+    return (
+    <ThemeProvider theme={createMuiTheme(themeStore.theme)}>
+    <div>
       <NavBar />
       <Container maxWidth="xl">
       <Toolbar />
@@ -72,6 +76,7 @@ export const App = observer(
           </Switch>
       </Container>
       </div>
+      </ThemeProvider>
     );
   })
 
