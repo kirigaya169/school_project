@@ -75,6 +75,7 @@ const RequestDialog = function(props){
     }
 
     const onAcceptButton = async() => {
+        console.log(serverHost);
         try{
             const data = axios.post(serverHost + 'api/requests/accept', {email: teacher}, {
                 params:{
@@ -84,6 +85,7 @@ const RequestDialog = function(props){
                     'Authorization': 'Baerar ' + userStore.token,
                 }
             })
+            
             setOpen(false);
             setIsDeleted(true);
         }

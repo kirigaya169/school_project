@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const {validationResult} = require('express-validator');
 const { io } = require("../socket.js");
 
+const Notification = require('../models/notification.js');
 const ApiError = require('../error.js');
 const Subject = require('../models/subject.js');
 
@@ -18,7 +19,7 @@ function generateJWT(user){
         roles: user.roles,
         class: user.class,
     }
-    console.log(payload);
+    //console.log(payload);
     return jwt.sign(payload, 
         key, {
             expiresIn: '24h'
@@ -37,7 +38,7 @@ class UserController{
             return next(ApiError.badRequest("Пользователь с таким email существует"));
         }
         subjects = subjects.split(',');
-        console.log(subjects);
+        //console.log(subjects);
         var subjectsBD = [];
         for (var i = 0; i < subjects.length; i++){
             var subject = await Subject.findOne({value: subjects[i]});
@@ -45,7 +46,7 @@ class UserController{
                 continue;
             }
             if (!subject){
-                console.log(subjects[i]);
+                //console.log(subjects[i]);
                 return next(ApiError.badRequest("Неправильный предмет"));
             }
             subjectsBD.push(subject.value);
@@ -88,19 +89,20 @@ class UserController{
 
     async check(req, res, next){
         const {email} = req.user.email;
-        console.log(req.user);
-         await User.find({}, (err, result) => {
-            result.forEach(user => {
-                console.log(user.email === req.user.email);
-            })
-        });
+        //console.log(req.user);
 
         const user = await User.findOne({email: req.user.email});
         if (!user) {
             return next(ApiError.badRequest("Неправильные данные!"));
         }
-        io.to(user._id).emit("notification", "aboba");
         return res.json({"token": generateJWT(user)});
+    }
+
+    async getNotifications(req, res, next){
+        const { id } = req.user;
+        //sconsole.log("not", req.user);
+        const notifications = await Notification.find({user: id});
+        return res.json({"notifications" : notifications});
     }
 
     async ChangeAdminRole(req, res, next){
@@ -112,7 +114,7 @@ class UserController{
         if (!user){
             return next(ApiError.badRequest("Неправильный email"));
         }
-        console.log(user.roles);
+        //console.log(user.roles);
         var result = false;
         const roles = user.roles;
         const index = roles.indexOf("ADMIN");
@@ -125,7 +127,7 @@ class UserController{
         }
         user.roles = roles;
         user.save();
-        console.log("saved");
+        //console.log("saved");
         return res.json({data: result});
     }
 
@@ -133,18 +135,18 @@ class UserController{
         const subject = req.query.subject;
         User.find({}, (err, result) => {
             if (err){
-                console.log(err);
+                //console.log(err);
                 return next(ApiError.internal("Что то пошло не так"));
             }
             const users = [];
             for (let user_id = 0; user_id < result.length; user_id++){
                 var user = result[user_id];
-                console.log(user, subject);
+                //console.log(user, subject);
                 if (user.subjects.includes(subject)){
                     users.push(user);
                 }
             }
-            console.log(users);
+            //console.log(users);
             return res.json(users);
         });
     }

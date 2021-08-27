@@ -15,7 +15,7 @@ module.exports = function(roles){
             const user = jwt.verify(token, key);
             var userRoles = user.roles;
             var hasRole = false;
-            console.log(userRoles);
+            //console.log(userRoles);
             userRoles.forEach(role => {
                 if (roles.includes(role)){
                     hasRole = true;

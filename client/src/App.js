@@ -15,7 +15,7 @@ import userStore from './store/userStore.js';
 import axios from 'axios';
 import serverHost from './config.js';
 import userCard from './components/admin/userCard.js';
-import {io} from 'socket.io-client'
+import io from 'socket.io-client'
 
 export const App = observer( 
 () => {
@@ -24,12 +24,28 @@ export const App = observer(
       axios.get(serverHost + 'api/user/check', {headers: {
         "Authorization" : "Baerar " + userStore.token,
       }}).then(data => {
+        console.log(data);
         userStore.setUser(data.data.token);
       }).catch(e => {
-        console.log(e.response) ;
+        console.log(e.response);
       });
-      const socket = io();
-      socket.emit("connection", "hello");
+      axios.get(serverHost + 'api/user/notifications', {headers: {
+        'Authorization': "Baerar " + userStore.token,
+      }}).then(data => {
+        console.log(data.data);
+      }).catch(e => {
+        console.log(e.response);
+      })
+      const socket = io('http://localhost:8000/');
+      console.log(socket);
+      socket.emit("join",  {user: userStore.user.email});
+      socket.on("message", data => {
+        console.log(data);
+      });
+      socket.on("notification", data => {
+        console.log(data);
+      })
+      //  socket.emit("connection", "hello");
     }, [])
     console.log("a", userStore);
     return (<div>

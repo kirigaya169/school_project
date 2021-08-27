@@ -5,10 +5,12 @@ const {v4: uuid4} = require('uuid');
 const {check} = require('express-validator');
 const authMiddleware = require('../middleware/authMiddleware.js');
 const roleMiddleware = require('../middleware/roleMiddlewware.js');
+
 //var upload = require('../middleware/uploadImageMiddleware.js');
 
 const router = new express();
 
+const server = require("http").createServer(router);
 
 router.post('/registration', [
     check('email', "Email введен неверно").isEmail(),
@@ -24,5 +26,7 @@ router.post('/change_role', roleMiddleware(["ADMIN"]), controller.ChangeAdminRol
 router.get('/subject', controller.getUsersBySubject);
 
 router.get('/check', authMiddleware, controller.check);
+
+router.get('/notifications', authMiddleware, controller.getNotifications);
 
 module.exports = router;

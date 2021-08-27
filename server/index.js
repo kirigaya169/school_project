@@ -5,7 +5,6 @@ const cors = require('cors');
 const path = require('path');
 const mongoose = require('mongoose');
 const fileUpload = require('express-fileupload');
-const Server = require("socket.io").Server;
 
 const Role = require('./models/role.js');
 const Subject = require('./models/subject.js');
@@ -14,9 +13,20 @@ const errorMiddleware = require('./middleware/errorMiddleware.js');
 
 require('dotenv').config();
 
-const {app, io} = require('./socket.js');
+const {app, io, server} = require('./socket.js');
 io.on("connection", (client) => {
-    console.log(client);
+    client.on("join", (data) => {
+        console.log(data, client.id);
+        client.join(data.user);
+        io.to(data.user).emit("notification", "new user");
+        //client.emit("message", "connection");
+        client.user = data.user;
+    })
+
+    client.on("disconnect", () =>{
+        console.log("ds", client.user, client.id);
+        client.leave(client.user);
+    })
 })
 
 //app.use(bodyParser.urlencoded({ extended: false }));
@@ -46,7 +56,7 @@ start = async() => {
             const subj = new Subject({value: subject});
             subj.save();
         })
-        app.listen(port);
+        server.listen(port);
         console.log(`Server works on the port ${port}...`);
     } catch(e){
         console.log(chalk.red(e));
