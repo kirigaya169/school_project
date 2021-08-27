@@ -9,7 +9,6 @@ const { io } = require("../socket.js");
 const Notification = require('../models/notification.js');
 const ApiError = require('../error.js');
 const Subject = require('../models/subject.js');
-const notification = require('../models/notification.js');
 
 function generateJWT(user){
     var key = process.env.TOKEN_KEY || "1a2b-3c4d-5e6f-7g8h";

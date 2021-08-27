@@ -75,11 +75,13 @@ class RequestController{
             user: teacher._id,
             text: `У вас состоится занятие по предмету ${lesson.subject} в ${lesson.date.toLocaleString(timeOptions)}`,
             readed: false,
+            date: new Date()
         })
         const userNotification = new Notification({
             user: requestAuthor._id,
             text: `Ваша заявка одобрена! Занятие пройдет ${lesson.date.toLocaleString(timeOptions)}.\n По всем вопросам пишите на третью безполезную почту Маши`,
             readed: false,
+            date: new Date(),
         })
         teacherNotification.save();
         userNotification.save();
@@ -108,6 +110,7 @@ class RequestController{
             user: user._id,
             text: `Ваша заявка по теме "${request.title}" была отклонена`,
             readed: false,
+            date: new Date(),
         });
         notification.save();
         io.to(user.email).emit("notification", notification);
