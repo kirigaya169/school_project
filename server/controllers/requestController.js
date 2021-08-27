@@ -85,7 +85,7 @@ class RequestController{
         })
         teacherNotification.save();
         userNotification.save();
-        console.log(io);
+        //console.log(userNotification);
         io.to(teacher.email).emit("notification", teacherNotification);
         io.to(requestAuthor.email).emit("notification", userNotification);
         await Request.findOneAndDelete({_id: id}, (err) =>{
