@@ -8,6 +8,27 @@ const request = require('../models/request.js');
 const user = require('../models/user.js');
 
 class RequestController{
+    constructor(){
+        this.dateString = function(m){
+            var dateString =
+            m.getUTCFullYear() + "." +
+            ("0" + (m.getUTCMonth()+1)).slice(-2) + "." +
+            ("0" + m.getUTCDate()).slice(-2);
+            
+            return dateString;
+        }
+        this.dateString = this.dateString.bind(this);
+    
+        this.timeString = function(m) {
+            var timeString = 
+            ("0" + m.getUTCHours()).slice(-2) + ":" +
+            ("0" + m.getUTCMinutes()).slice(-2) + ":" +
+            ("0" + m.getUTCSeconds()).slice(-2);
+            return timeString;
+        }
+        this.timeString = this.timeString.bind(this);
+    }
+
     async create(req, res){
         var {title, description, subject, date} = req.body;
         var email = req.user.email;
@@ -41,23 +62,6 @@ class RequestController{
         })
     }
 
-    dateString(m){
-        var dateString =
-        m.getUTCFullYear() + "/" +
-        ("0" + (m.getUTCMonth()+1)).slice(-2) + "/" +
-        ("0" + m.getUTCDate()).slice(-2);
-        
-        return dateString;
-    }
-
-    timeString(m){
-        var timeString = 
-        ("0" + m.getUTCHours()).slice(-2) + ":" +
-        ("0" + m.getUTCMinutes()).slice(-2) + ":" +
-        ("0" + m.getUTCSeconds()).slice(-2);
-        return timeString;
-    }
-
     async accept(req, res, next){
         const id = req.query.id;
         console.log(req.query);
@@ -88,7 +92,8 @@ class RequestController{
             hour: 'numeric', minute: 'numeric', second: 'numeric',
             hour12: false
           };
-          
+        console.log(this);
+        console.log(lesson.date, this.dateString(lesson.date));
         const teacherNotification = new Notification({
             user: teacher._id,
             text: `У вас состоится занятие по предмету ${lesson.subject} ${this.dateString(lesson.date)} в ${this.timeString(lesson.date)}`,

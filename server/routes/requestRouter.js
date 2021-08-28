@@ -10,7 +10,7 @@ router.post('/', authMiddleware, requestController.create);
 
 router.get('/', roleMiddleware(['ADMIN']), requestController.getAll);
 
-router.post('/accept', roleMiddleware(['ADMIN']), requestController.accept);
+router.post('/accept', roleMiddleware(['ADMIN']), requestController.accept.bind(requestController));
 
 router.post('/reject', roleMiddleware(['ADMIN']), requestController.reject);
 
