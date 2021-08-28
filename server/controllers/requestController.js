@@ -41,6 +41,23 @@ class RequestController{
         })
     }
 
+    dateString(m){
+        var dateString =
+        m.getUTCFullYear() + "/" +
+        ("0" + (m.getUTCMonth()+1)).slice(-2) + "/" +
+        ("0" + m.getUTCDate()).slice(-2);
+        
+        return dateString;
+    }
+
+    timeString(m){
+        var timeString = 
+        ("0" + m.getUTCHours()).slice(-2) + ":" +
+        ("0" + m.getUTCMinutes()).slice(-2) + ":" +
+        ("0" + m.getUTCSeconds()).slice(-2);
+        return timeString;
+    }
+
     async accept(req, res, next){
         const id = req.query.id;
         console.log(req.query);
@@ -71,15 +88,16 @@ class RequestController{
             hour: 'numeric', minute: 'numeric', second: 'numeric',
             hour12: false
           };
+          
         const teacherNotification = new Notification({
             user: teacher._id,
-            text: `У вас состоится занятие по предмету ${lesson.subject} в ${lesson.date.toLocaleString(timeOptions)}`,
+            text: `У вас состоится занятие по предмету ${lesson.subject} ${this.dateString(lesson.date)} в ${this.timeString(lesson.date)}`,
             readed: false,
             date: new Date()
         })
         const userNotification = new Notification({
             user: requestAuthor._id,
-            text: `Ваша заявка одобрена! Занятие пройдет ${lesson.date.toLocaleString(timeOptions)}.\n По всем вопросам пишите на третью безполезную почту Маши`,
+            text: `Ваша заявка одобрена! Занятие пройдет ${this.dateString(lesson.date)} в ${this.timeString(lesson.date)}.\n По всем вопросам пишите на третью безполезную почту Маши`,
             readed: false,
             date: new Date(),
         })
