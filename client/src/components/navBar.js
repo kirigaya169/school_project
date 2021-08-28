@@ -14,6 +14,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { Menu, MenuItem } from '@material-ui/core';
 import userStore from '../store/userStore.js';
 import ThemeSwitch from './themeSwitch.js';
+import NotificationView from './notificationsView.js';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,6 +49,7 @@ export default function NavBar() {
           </Typography>
           <div>
             <ThemeSwitch />
+            {(userStore.isAuth) && <NotificationView />}
             {(userStore.isAuth && userStore.user.roles.includes("ADMIN")) && <IconButton component={BrowserLink} to="/admin" className={classes.title} aria-label="админ-панель" style={{color: 'white'}}>
                 <SettingsIcon />
             </IconButton>}

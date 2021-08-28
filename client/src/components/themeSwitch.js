@@ -11,7 +11,7 @@ export default observer(function(){
     //const classes = useStyles();
     const handleChange = e => {
         setCheck(!check);
-        console.log(check);
+        //console.log(check);
         if (!check) {
             themeStore.setTheme({
                 palette: {

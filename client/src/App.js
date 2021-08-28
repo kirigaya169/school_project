@@ -17,39 +17,28 @@ import serverHost from './config.js';
 import userCard from './components/admin/userCard.js';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import themeStore from './store/themeStore.js';
-import io from 'socket.io-client'
 
 export const App = observer( 
 () => {
     React.useEffect(async() => {
-      console.log(userStore);
+      //console.log(userStore);
+      if (!userStore.isAuth) return;
       axios.get(serverHost + 'api/user/check', {headers: {
         "Authorization" : "Baerar " + userStore.token,
       }}).then(data => {
-        console.log(data);
+        //console.log(data);
         userStore.setUser(data.data.token);
       }).catch(e => {
+        if (e.response.status == "403"){
+          userStore.setIsAuth(false);
+      }
         console.log(e.response);
       });
-      axios.get(serverHost + 'api/user/notifications', {headers: {
-        'Authorization': "Baerar " + userStore.token,
-      }}).then(data => {
-        console.log(data.data);
-      }).catch(e => {
-        console.log(e.response);
-      })
-      const socket = io('http://localhost:8000/');
-      console.log(socket);
-      socket.emit("join",  {user: userStore.user.email});
-      socket.on("message", data => {
-        console.log(data);
-      });
-      socket.on("notification", data => {
-        console.log(data);
-      })
+      
+      
       //  socket.emit("connection", "hello");
     }, [])
-    console.log("a", userStore);
+    //console.log("a", userStore);
     return (
     <ThemeProvider theme={createMuiTheme(themeStore.theme)}>
     <div>

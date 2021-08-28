@@ -121,8 +121,8 @@ class RequestController{
 
     async reject(req, res, next){
         const id = req.query.id;
-        request =  await Request.findById(id);
-        user = await User.findOne({email: request.author_email});
+        const request =  await Request.findById(id);
+        const user = await User.findOne({email: request.author_email});
         await Request.findOneAndDelete({_id: id}, (err) => {
             if (err){
                 console.log(err);

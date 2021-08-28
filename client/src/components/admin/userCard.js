@@ -32,7 +32,7 @@ export default observer(function UserCard(props){
             setIsAdmin(data.data.data);
         }
         catch(e) {
-            console.log(e.response);
+            //console.log(e.response);
             if (e.response.status == "403"){
                 userStore.setIsAuth(false);
             }

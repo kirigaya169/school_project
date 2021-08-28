@@ -75,7 +75,7 @@ const RequestDialog = function(props){
     }
 
     const onAcceptButton = async() => {
-        console.log(serverHost);
+        //console.log(serverHost);
         try{
             const data = axios.post(serverHost + 'api/requests/accept', {email: teacher}, {
                 params:{
@@ -97,7 +97,7 @@ const RequestDialog = function(props){
         }
     }
     
-    console.log(onReject);
+    //console.log(onReject);
     return (<Dialog onClose={handleClose} aria-labelledby="title" open={open}>
         <DialogTitle id="title">
             {request.title}

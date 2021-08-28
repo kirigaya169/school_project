@@ -6,7 +6,8 @@ import UserStore from './store/userStore';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { HashRouter } from 'react-router-dom';
-import {ThemeProvider, createMuiTheme} from '@material-ui/core/styles'
+import {ThemeProvider, createMuiTheme} from '@material-ui/core/styles';
+import { SnackbarProvider } from 'notistack'
 
 const theme = createMuiTheme({
   palette: {
@@ -21,7 +22,9 @@ ReactDOM.render(
   <React.StrictMode>
   <HashRouter basename='/'>
   <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    <SnackbarProvider>
       <App />
+    </SnackbarProvider>
     </MuiPickersUtilsProvider>
     </HashRouter>
   </React.StrictMode>,

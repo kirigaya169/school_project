@@ -22,7 +22,7 @@ export default observer(function(props) {
         setIsLoading(true);
     }).catch(e => {
         if (e.response.status == '403'){
-            console.log(userStore.user);
+            //console.log(userStore.user);
             userStore.setIsAuth(false);
         }
     })
@@ -34,7 +34,7 @@ export default observer(function(props) {
         //return () => mounted = false;
     }, [])
 
-    console.log(isLoading);
+    //console.log(isLoading);
     return (<div>
         <Typography variant="h3" component="h2" gutterBottom>
             Роли пользователей

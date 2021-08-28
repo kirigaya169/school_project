@@ -30,7 +30,7 @@ const LoginForm = observer(
     class LoginForm extends React.Component{
 
         constructor(props){
-            console.log(props);
+            //console.log(props);
             super(props);
             
             
@@ -63,7 +63,7 @@ const LoginForm = observer(
                 this.setState({succees_text: "Запись успешно создана"});
             }
             catch(e){
-                console.log("error", e);
+                //console.log("error", e);
                 var json = JSON.parse(e.request.response);
                 this.setState({error_text: json.data});
             }
