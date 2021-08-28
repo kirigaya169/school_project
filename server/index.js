@@ -18,7 +18,6 @@ io.on("connection", (client) => {
     client.on("join", (data) => {
         console.log(data, client.id);
         client.join(data.user);
-        io.to(data.user).emit("notification", "new user");
         //client.emit("message", "connection");
         client.user = data.user;
     })
