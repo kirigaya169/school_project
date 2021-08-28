@@ -19,6 +19,10 @@ export class UserStore{
     isAuth = false;
     user = {};
     token = '';
+    count= 0;
+    snackbars = [];
+    notification = null;
+    notifications = [];
 
     constructor(){
         this.load();
