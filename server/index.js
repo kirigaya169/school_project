@@ -39,7 +39,7 @@ app.use(fileUpload({}));
 app.use('/api', router);
 app.use(errorMiddleware);
 
-const dbAdress = process.env.DB_ADDRESS || "mongodb+srv://kirigaya169:mXzuNyx9369LpeP@cluster0.zfvzb.mongodb.net/school_project?retryWrites=true&w=majority";
+const dbAdress = process.env.DB_ADDRESS;
 
 const subjects = [
     
