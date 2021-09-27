@@ -227,7 +227,7 @@ const RegistrationForm = observer(
                     </Box>
                     <div>
                         <Button variant="contained" color="primary" type="submit">
-                            Зарегестрироваться
+                            Зарегистрироваться
                         </Button>
                     </div>
                 </Box>
